@@ -53,9 +53,9 @@ export class BinarySearchTree<E extends Comparable<E>> {
     return criteria;
   }
 
-  insert(comparable: E): boolean;
-  insert(item: BinarySearchTreeNode<E>): boolean;
-  insert(item: BinarySearchTreeNode<E>, root: BinarySearchTreeNode<E>): boolean;
+  public insert(comparable: E): boolean;
+  public insert(item: BinarySearchTreeNode<E>): boolean;
+  public insert(item: BinarySearchTreeNode<E>, root: BinarySearchTreeNode<E>): boolean;
   public insert(...args: any[]): boolean {
     if (args.length === 1) {
       const comparableOrNode = args[0] as E | BinarySearchTreeNode<E>;
@@ -100,8 +100,8 @@ export class BinarySearchTree<E extends Comparable<E>> {
     }
   }
 
-  remove(comparable: E): boolean;
-  remove(node: BinarySearchTreeNode<E>, comparable: E): BinarySearchTreeNode<E> | null;
+  public remove(comparable: E): boolean;
+  public remove(node: BinarySearchTreeNode<E>, comparable: E): BinarySearchTreeNode<E> | null;
   public remove(...args: any[]): boolean | BinarySearchTreeNode<E> | null {
     if (args.length === 1) {
       const comparable = args[0] as E;
@@ -130,8 +130,8 @@ export class BinarySearchTree<E extends Comparable<E>> {
     }
   }
 
-  removeMinimum(): E | null;
-  removeMinimum(node: BinarySearchTreeNode<E>): BinarySearchTreeNode<E>;
+  public removeMinimum(): E | null;
+  public removeMinimum(node: BinarySearchTreeNode<E>): BinarySearchTreeNode<E>;
   public removeMinimum(...args: any[]): E | null | BinarySearchTreeNode<E> {
     if (args.length === 0) {
       if (this.root == null) return null;
@@ -151,8 +151,8 @@ export class BinarySearchTree<E extends Comparable<E>> {
     return node;
   }
 
-  removeMaximum(): E | null;
-  removeMaximum(node: BinarySearchTreeNode<E>): BinarySearchTreeNode<E>;
+  public removeMaximum(): E | null;
+  public removeMaximum(node: BinarySearchTreeNode<E>): BinarySearchTreeNode<E>;
   public removeMaximum(...args: any[]): E | null | BinarySearchTreeNode<E> {
     if (args.length === 0) {
       if (this.root == null) return null;
@@ -172,8 +172,8 @@ export class BinarySearchTree<E extends Comparable<E>> {
     return node;
   }
 
-  getMinimum(): E | null;
-  getMinimum(node: BinarySearchTreeNode<E>): BinarySearchTreeNode<E>;
+  public getMinimum(): E | null;
+  public getMinimum(node: BinarySearchTreeNode<E>): BinarySearchTreeNode<E>;
   public getMinimum(...args: any[]): E | null | BinarySearchTreeNode<E> {
     if (args.length === 0) {
       if (this.root == null) return null;
@@ -187,8 +187,8 @@ export class BinarySearchTree<E extends Comparable<E>> {
     return node;
   }
 
-  getMaximum(): E | null;
-  getMaximum(node: BinarySearchTreeNode<E>): BinarySearchTreeNode<E>;
+  public getMaximum(): E | null;
+  public getMaximum(node: BinarySearchTreeNode<E>): BinarySearchTreeNode<E>;
   public getMaximum(...args: any[]): E | null | BinarySearchTreeNode<E> {
     if (args.length === 0) {
       if (this.root == null) return null;
@@ -202,8 +202,8 @@ export class BinarySearchTree<E extends Comparable<E>> {
     return node;
   }
 
-  contains(comparable: E | null): boolean;
-  contains(node: BinarySearchTreeNode<E>, comparable: E): BinarySearchTreeNode<E> | null;
+  public contains(comparable: E | null): boolean;
+  public contains(node: BinarySearchTreeNode<E>, comparable: E): BinarySearchTreeNode<E> | null;
   public contains(...args: any[]): boolean | BinarySearchTreeNode<E> | null {
     if (args.length === 1) {
       const comparable = args[0] as E | null;
@@ -245,8 +245,8 @@ export class BinarySearchTree<E extends Comparable<E>> {
     return this.root === null;
   }
 
-  getHeight(): number;
-  getHeight(node: BinarySearchTreeNode<E> | null): number;
+  public getHeight(): number;
+  public getHeight(node: BinarySearchTreeNode<E> | null): number;
   public getHeight(...args: any[]): number {
     if (args.length === 0) {
       return this.getHeight(this.root);
@@ -257,8 +257,8 @@ export class BinarySearchTree<E extends Comparable<E>> {
     return 1 + Math.max(this.getHeight(node.left), this.getHeight(node.right));
   }
 
-  getSize(): number;
-  getSize(node: BinarySearchTreeNode<E> | null): number;
+  public getSize(): number;
+  public getSize(node: BinarySearchTreeNode<E> | null): number;
   public getSize(...args: any[]): number {
     if (args.length === 0) {
       return this.size;
@@ -400,8 +400,8 @@ export class BinarySearchTree<E extends Comparable<E>> {
     return new BinarySearchTreeIterator<E>(this.root, false);
   }
 
-  balanceTree(): void;
-  balanceTree(node: BinarySearchTreeNode<E> | null): void;
+  public balanceTree(): void;
+  public balanceTree(node: BinarySearchTreeNode<E> | null): void;
   public balanceTree(...args: any[]): void {
     if (args.length === 0) {
       const root = this.root;

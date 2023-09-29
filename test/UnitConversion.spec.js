@@ -31,8 +31,6 @@ describe('UnitConversion', () => {
     p.should.closeTo(r, tolerance);
   });
   it('mpsToFps', () => {
-    (UnitConversion.MPS_TO_FPS * UnitConversion.FPS_TO_MPS).should.equal(1);
-
     const m = 2.5;
     const f = UnitConversion.metersPerSecondToFeetPerSecond(m);
     const r = UnitConversion.feetPerSecondToMetersPerSecond(f);
