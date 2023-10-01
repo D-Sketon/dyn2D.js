@@ -1,4 +1,4 @@
 export interface DataContainer {
-  setUserData(data: object): void;
-  getUserData(): object;
+  setUserData(data: any): void;
+  getUserData(): any;
 }
