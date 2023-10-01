@@ -7,20 +7,20 @@ export const INV_SQRT_3 = 1 / Math.sqrt(3);
 
 function _getWinding(points: Vector2[]): number {
   if (points == null)
-    throw new TypeError("points");
+    throw new TypeError("Geometry.getWinding: points");
   const len = points.length;
   if (len < 2)
-    throw new RangeError("points.length < 2");
+    throw new RangeError("Geometry.getWinding: points.length < 2");
   let area = 0;
   for (let i = 0; i < len; i++) {
     const j = i + 1 == len ? 0 : i + 1;
     const p1 = points[i];
     const p2 = points[j];
     if (p1 == null) {
-      throw new TypeError("points[" + i + "]");
+      throw new TypeError("Geometry.getWinding: points[" + i + "]");
     }
     if (p2 == null) {
-      throw new TypeError("points[" + j + "]");
+      throw new TypeError("Geometry.getWinding: points[" + j + "]");
     }
     area += p1.cross(p2);
   }
@@ -41,7 +41,7 @@ function getWinding(...args: any[]): number {
 
 function _reverseWinding(points: Vector2[]): void {
   if (points == null)
-    throw new TypeError("points");
+    throw new TypeError("Geometry.reverseWinding: points");
   if (points.length < 2) return;
   points.reverse();
 }
@@ -60,21 +60,21 @@ function reverseWinding(...args: any[]): void {
 
 function _getAverageCenter(points: Vector2[]): Vector2 {
   if (points == null)
-    throw new TypeError("points");
+    throw new TypeError("Geometry.getAverageCenter: points");
   const len = points.length;
   if (len === 0)
-    throw new RangeError("points.length === 0");
+    throw new RangeError("Geometry.getAverageCenter: points.length === 0");
   if (len === 1) {
     const p = points[0];
     if (p == null)
-      throw new TypeError("points[0]");
+      throw new TypeError("Geometry.getAverageCenter: points[0]");
     return p.copy();
   }
   const ac = new Vector2();
   for (let i = 0; i < len; i++) {
     const p = points[i];
     if (p == null)
-      throw new TypeError("points[" + i + "]");
+      throw new TypeError("Geometry.getAverageCenter: points[" + i + "]");
     ac.add(p);
   }
   return ac.divide(len);

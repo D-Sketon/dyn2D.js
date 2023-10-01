@@ -10,7 +10,7 @@ export class Interval {
       this.max = min.max;
     } else if (typeof min === "number" && typeof max === "number") {
       if (min > max)
-        throw new Error("min must be less than or equal to max");
+        throw new Error("Interval: min must be less than or equal to max");
       this.min = min;
       this.max = max;
     }
@@ -18,13 +18,13 @@ export class Interval {
 
   public setMin(min: number): void {
     if (min > this.max)
-      throw new Error("min must be less than or equal to max");
+      throw new Error("Interval.setMin: min must be less than or equal to max");
     this.min = min;
   }
 
   public setMax(max: number): void {
     if (this.min > max)
-      throw new Error("min must be less than or equal to max");
+      throw new Error("Interval.setMax: min must be less than or equal to max");
     this.max = max;
   }
 
@@ -79,11 +79,11 @@ export class Interval {
   }
 
   public containsInclusiveMax(interval: Interval): boolean {
-    return this.min <= interval.min && this.max > interval.max;
+    return this.min < interval.min && this.max >= interval.max;
   }
 
   public containsInclusiveMin(interval: Interval): boolean {
-    return this.min < interval.min && this.max >= interval.max;
+    return this.min <= interval.min && this.max > interval.max;
   }
 
   public union(interval: Interval): void {

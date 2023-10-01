@@ -62,7 +62,7 @@ export class Rotation implements Copyable<Rotation>{
       const sint = args[1];
       const magnitude = cost * cost + sint * sint;
       if (Math.abs(magnitude - 1) > Epsilon.E) {
-        throw new Error("Invalid rotation");
+        throw new Error("Rotation.of: Invalid rotation");
       }
       return new Rotation(cost, sint);
     }
@@ -73,35 +73,35 @@ export class Rotation implements Copyable<Rotation>{
     return new Rotation(angle * Math.PI / 180);
   }
 
-  public static rotate0(): Rotation {
+  public static rotation0(): Rotation {
     return new Rotation(1, 0);
   }
 
-  public static rotate90(): Rotation {
+  public static rotation90(): Rotation {
     return new Rotation(0, 1);
   }
 
-  public static rotate180(): Rotation {
+  public static rotation180(): Rotation {
     return new Rotation(-1, 0);
   }
 
-  public static rotate270(): Rotation {
+  public static rotation270(): Rotation {
     return new Rotation(0, -1);
   }
 
-  public static rotate45(): Rotation {
+  public static rotation45(): Rotation {
     return new Rotation(Rotation.SQRT_2_INV, Rotation.SQRT_2_INV);
   }
 
-  public static rotate135(): Rotation {
+  public static rotation135(): Rotation {
     return new Rotation(-Rotation.SQRT_2_INV, Rotation.SQRT_2_INV);
   }
 
-  public static rotate225(): Rotation {
+  public static rotation225(): Rotation {
     return new Rotation(-Rotation.SQRT_2_INV, -Rotation.SQRT_2_INV);
   }
 
-  public static rotate315(): Rotation {
+  public static rotation315(): Rotation {
     return new Rotation(Rotation.SQRT_2_INV, -Rotation.SQRT_2_INV);
   }
 
@@ -166,8 +166,13 @@ export class Rotation implements Copyable<Rotation>{
     return this.toRadians() * 180 / Math.PI;
   }
 
-  public toVector(): Vector2 {
-    return new Vector2(this.cost, this.sint);
+  public toVector(): Vector2;
+  public toVector(magnitude: number): Vector2;
+  public toVector(magnitude?: number): Vector2 {
+    if (magnitude === undefined) {
+      return new Vector2(this.cost, this.sint);
+    }
+    return new Vector2(this.cost * magnitude, this.sint * magnitude);
   }
 
   private rotate45Helper(cost: number, sint: number): Rotation {
@@ -264,16 +269,21 @@ export class Rotation implements Copyable<Rotation>{
     return this;
   }
 
+  public getRotated(rotation: Rotation): Rotation;
   public getRotated(angle: number): Rotation;
   public getRotated(c: number, s: number): Rotation;
-  public getRotated(c: number, s?: number): Rotation {
-    if (typeof s === "number") {
-      return new Rotation(
-        Interval.clamp(this.cost * c - this.sint * s, -1, 1),
-        Interval.clamp(this.cost * s + this.sint * c, -1, 1)
-      );
-    } return this.getRotated(Math.cos(c), Math.sin(c));
-
+  public getRotated(c: unknown, s?: number): Rotation {
+    if (c instanceof Rotation) {
+      return this.getRotated(c.cost, c.sint);
+    } else if (typeof c === "number") {
+      if (typeof s === "number") {
+        return new Rotation(
+          Interval.clamp(this.cost * c - this.sint * s, -1, 1),
+          Interval.clamp(this.cost * s + this.sint * c, -1, 1)
+        );
+      }
+      return this.getRotated(Math.cos(c), Math.sin(c));
+    }
   }
 
   public rotate(rotation: Rotation): Rotation;

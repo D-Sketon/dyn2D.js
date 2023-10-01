@@ -236,7 +236,7 @@ describe('BinarySearchTree', () => {
     try {
       new BinarySearchTreeNode<Integer>(null);
     } catch(e) {
-      e.message.should.equal('comparable');
+      e.message.should.equal('BinarySearchTreeNode: comparable');
     }
   });
 
@@ -347,7 +347,7 @@ describe('BinarySearchTree', () => {
         break;
       }
     } catch (e) {
-      e.message.should.equal('Unsupported operation');
+      e.message.should.equal('BinarySearchTreeIterator.remove: Unsupported operation');
     }
   });
 
@@ -362,7 +362,7 @@ describe('BinarySearchTree', () => {
       it.next();
       it.next();
     } catch (e) {
-      e.message.should.equal('No such element');
+      e.message.should.equal('BinarySearchTreeIterator.next: No such element');
     }
   });
 
@@ -373,7 +373,7 @@ describe('BinarySearchTree', () => {
     try {
       it.next();
     } catch (e) {
-      e.message.should.equal('No such element');
+      e.message.should.equal('BinarySearchTreeIterator.next: No such element');
     }
   });
 

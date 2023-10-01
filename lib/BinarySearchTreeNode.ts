@@ -8,7 +8,7 @@ export class BinarySearchTreeNode<E extends Comparable<E>> {
 
   constructor(comparable: E, parent: BinarySearchTreeNode<E> | null = null, left: BinarySearchTreeNode<E> | null = null, right: BinarySearchTreeNode<E> | null = null) {
     if (comparable == null)
-      throw new TypeError("comparable");
+      throw new TypeError("BinarySearchTreeNode: comparable");
     this.comparable = comparable;
     this.parent = parent;
     this.left = left;

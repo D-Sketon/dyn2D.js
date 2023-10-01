@@ -80,7 +80,7 @@ export class BinarySearchTreeIterator<E extends Comparable<E>> {
 
   public next(): E {
     if (this.stack.length === 0)
-      throw new Error("No such element");
+      throw new Error("BinarySearchTreeIterator.next: No such element");
     const node = this.stack.pop() as BinarySearchTreeNode<E>;
     if (this.inOrder) {
       this.pushLeft(node.right);
@@ -91,6 +91,6 @@ export class BinarySearchTreeIterator<E extends Comparable<E>> {
   }
 
   public remove(): void {
-    throw new Error("Unsupported operation");
+    throw new Error("BinarySearchTreeIterator.remove: Unsupported operation");
   }
 }
