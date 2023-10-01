@@ -148,4 +148,8 @@ export class Interval {
   public getLength(): number {
     return this.max - this.min;
   }
+
+  public toString(): string {
+    return `Interval[min=${this.min}, max=${this.max}]`;
+  }
 }

@@ -248,4 +248,8 @@ export class Matrix33 implements Copyable<Matrix33>{
     }
     return false;
   }
+
+  public toString(): string {
+    return `Matrix33(${this.m00}, ${this.m01}, ${this.m02}, ${this.m10}, ${this.m11}, ${this.m12}, ${this.m20}, ${this.m21}, ${this.m22})`;
+  }
 }

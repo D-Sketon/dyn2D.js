@@ -336,4 +336,8 @@ export class Rotation implements Copyable<Rotation>{
     }
     return this.getRotationBetween(Rotation.of(rotation));
   }
+
+  public toString(): string {
+    return `Rotation[cost=${this.cost}, sint=${this.sint}]`;
+  }
 }

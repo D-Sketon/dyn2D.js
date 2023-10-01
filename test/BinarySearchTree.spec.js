@@ -338,19 +338,6 @@ describe('BinarySearchTree', () => {
     }
   });
 
-  it('iteratorRemove', () => {
-    const it = tree.inOrderIterator();
-    try {
-      while (it.hasNext()) {
-        it.next();
-        it.remove();
-        break;
-      }
-    } catch (e) {
-      e.message.should.equal('BinarySearchTreeIterator.remove: Unsupported operation');
-    }
-  });
-
   it('iteratorWithoutCheckingHasNext', () => {
     const newTree = new BinarySearchTree();
     newTree.insert(10);

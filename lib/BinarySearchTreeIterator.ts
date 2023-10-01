@@ -1,7 +1,7 @@
 import { BinarySearchTreeNode } from "./BinarySearchTreeNode";
 import { Comparable, compareTo } from "./Comparable";
 
-export class BinarySearchTreeIterator<E extends Comparable<E>> {
+export class BinarySearchTreeIterator<E extends Comparable<E>> implements Iterator<E>{
   stack: BinarySearchTreeNode<E>[];
   root: BinarySearchTreeNode<E> | null;
   from: E | null;
@@ -78,19 +78,22 @@ export class BinarySearchTreeIterator<E extends Comparable<E>> {
     return this.stack.length > 0;
   }
 
-  public next(): E {
-    if (this.stack.length === 0)
-      throw new Error("BinarySearchTreeIterator.next: No such element");
+  public next(): IteratorResult<E, any> {
+    if (this.stack.length === 0) {
+      return {
+        done: true,
+        value: null
+      };
+    }
     const node = this.stack.pop() as BinarySearchTreeNode<E>;
     if (this.inOrder) {
       this.pushLeft(node.right);
     } else {
       this.pushRight(node.left);
     }
-    return node.comparable;
-  }
-
-  public remove(): void {
-    throw new Error("BinarySearchTreeIterator.remove: Unsupported operation");
+    return {
+      done: false,
+      value: node.comparable
+    };
   }
 }

@@ -278,9 +278,8 @@ export class BinarySearchTree<E extends Comparable<E>> {
   public insertSubtree(tree: BinarySearchTree<E>): boolean {
     if (tree == null) return false;
     if (tree.root == null) return true;
-    const iterator = tree.inOrderIterator();
-    while (iterator.hasNext()) {
-      const newNode = new BinarySearchTreeNode<E>(iterator.next());
+    for(let it of tree) {
+      const newNode = new BinarySearchTreeNode<E>(it);
       this.insert(newNode);
     }
     return true;
@@ -400,6 +399,10 @@ export class BinarySearchTree<E extends Comparable<E>> {
     return new BinarySearchTreeIterator<E>(this.root, false);
   }
 
+  [Symbol.iterator](): Iterator<E> {
+    return this.inOrderIterator();
+  }
+
   public balanceTree(): void;
   public balanceTree(node: BinarySearchTreeNode<E> | null): void;
   public balanceTree(...args: any[]): void {
@@ -411,7 +414,7 @@ export class BinarySearchTree<E extends Comparable<E>> {
       this.selfBalancing = true;
       const iterator = new BinarySearchTreeIterator<E>(root);
       while (iterator.hasNext()) {
-        const node = new BinarySearchTreeNode<E>(iterator.next());
+        const node = new BinarySearchTreeNode<E>(iterator.next().value);
         this.insert(node);
       }
       this.selfBalancing = balancing;
@@ -542,7 +545,7 @@ export class BinarySearchTree<E extends Comparable<E>> {
     while (iterator.hasNext()) {
       res += iterator.next();
       if (iterator.hasNext()) {
-        res += ',';
+        res += ', ';
       }
     }
     res += ']';

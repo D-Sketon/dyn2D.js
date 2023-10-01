@@ -170,6 +170,8 @@ export class Mass implements Copyable<Mass>{
     }
   }
 
-
+  public toString(): string {
+    return `Mass[Type=${this.type}, Center=${this.center}, Mass=${this.mass}, Inertia=${this.inertia}]`;
+  }
 
 }

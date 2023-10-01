@@ -115,4 +115,8 @@ export abstract class AbstractShape implements Shape {
   getUserData(): any {
     return this.userData;
   }
+
+  toString(): string {
+    return `AbstractShape[center=${this.center}, radius=${this.radius}, userData=${this.userData}]`;
+  }
 }

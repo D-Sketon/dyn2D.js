@@ -295,4 +295,8 @@ export class Vector3 implements Copyable<Vector3>{
     this.z *= magnitude;
     return magnitude;
   }
+
+  public toString(): string {
+    return `Vector3(${this.x}, ${this.y}, ${this.z})`;
+  }
 }

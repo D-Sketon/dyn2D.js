@@ -29,4 +29,8 @@ export class BinarySearchTreeNode<E extends Comparable<E>> {
     return this.parent != null && this.parent.left === this;
   }
 
+  public toString(): string {
+    return `BinarySearchTreeNode[Comparable=${this.comparable.toString()}, Parent=${this.parent != null ? this.parent.comparable.toString() : "null"}, Left=${this.left != null ? this.left.comparable.toString() : "null"}, Right=${this.right != null ? this.right.comparable.toString() : "null"}]`;
+  }
+
 }

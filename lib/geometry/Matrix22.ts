@@ -192,9 +192,9 @@ export class Matrix22 implements Copyable<Matrix22>{
   }
 
   public normInfinity(): number {
-		const row1 = Math.abs(this.m00) + Math.abs(this.m01);
-		const row2 = Math.abs(this.m10) + Math.abs(this.m11);
-		return Math.max(row1, row2);	
+    const row1 = Math.abs(this.m00) + Math.abs(this.m01);
+    const row2 = Math.abs(this.m10) + Math.abs(this.m11);
+    return Math.max(row1, row2);
   }
 
   public norm1(): number {
@@ -212,14 +212,18 @@ export class Matrix22 implements Copyable<Matrix22>{
   }
 
   public equals(obj: unknown): boolean {
-    if(obj == null) return false;
-    if(obj == this) return true;
-    if(obj instanceof Matrix22) {
-      if(obj.m00 == this.m00 && obj.m01 == this.m01 && 
+    if (obj == null) return false;
+    if (obj == this) return true;
+    if (obj instanceof Matrix22) {
+      if (obj.m00 == this.m00 && obj.m01 == this.m01 &&
         obj.m10 == this.m10 && obj.m11 == this.m11) {
         return true;
       }
     }
     return false;
+  }
+
+  public toString(): string {
+    return `Matrix22(${this.m00}, ${this.m01}, ${this.m10}, ${this.m11})`;
   }
 }

@@ -108,7 +108,7 @@ export class Vector2 implements Copyable<Vector2> {
   }
 
   public toString(): string {
-    return `(${this.x}, ${this.y})`;
+    return `Vector2(${this.x}, ${this.y})`;
   }
 
   public set(vector: Vector2): Vector2;

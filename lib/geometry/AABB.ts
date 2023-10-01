@@ -297,4 +297,8 @@ export class AABB implements Translatable, Copyable<AABB> {
   public getMaxY(): number {
     return this.maxY;
   }
+
+  public toString(): string {
+    return `AABB[MinX=${this.minX}, MinY=${this.minY}, MaxX=${this.maxX}, MaxY=${this.maxY}]`;
+  }
 }
