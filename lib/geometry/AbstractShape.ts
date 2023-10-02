@@ -52,10 +52,12 @@ export abstract class AbstractShape implements Shape {
   contains(point: Vector2, transform: Transform): boolean;
   contains(point: Vector2, transform: Transform, inclusive: boolean): boolean;
   contains(point: Vector2, transform?: Transform, inclusive?: boolean): boolean {
-    if (transform == null) {
+    if (transform == null && inclusive == null) {
       return this.contains(point, AbstractShape.IDENTITY, true);
     }
-    return this.contains(point, transform, true);
+    if (inclusive == null) {
+      return this.contains(point, transform, true);
+    }
   }
 
   abstract getArea(): number;
@@ -65,13 +67,20 @@ export abstract class AbstractShape implements Shape {
   createAABB(): AABB;
   createAABB(transform: Transform): AABB;
   createAABB(transform?: Transform): AABB {
-    return this.createAABB(AbstractShape.IDENTITY);
+    if (transform == null) {
+      return this.createAABB(AbstractShape.IDENTITY);
+    }
+    const aabb = new AABB(0, 0, 0, 0);
+    this.computeAABB(aabb, transform);
+    return aabb;
   }
 
   computeAABB(aabb: AABB): void;
   computeAABB(aabb: AABB, transform: Transform): void;
   computeAABB(aabb: AABB, transform?: Transform): void {
-    this.computeAABB(aabb, AbstractShape.IDENTITY);
+    if (transform == null) {
+      this.computeAABB(aabb, AbstractShape.IDENTITY);
+    }
   }
 
   rotate(theta: number): void;
