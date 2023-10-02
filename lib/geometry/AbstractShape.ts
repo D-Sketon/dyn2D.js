@@ -43,9 +43,7 @@ export abstract class AbstractShape implements Shape {
   project(vector: Vector2): Interval;
   project(vector: Vector2, transform: Transform): Interval;
   project(vector: Vector2, transform?: Transform): Interval {
-    if (transform == null) {
-      return this.project(vector, AbstractShape.IDENTITY);
-    }
+    return this.project(vector, AbstractShape.IDENTITY);
   }
 
   contains(point: Vector2): boolean;

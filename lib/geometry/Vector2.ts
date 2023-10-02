@@ -5,10 +5,10 @@ import { Rotation } from "./Rotation";
 
 export class Vector2 implements Copyable<Vector2> {
 
-  static readonly X_ASIS = new Vector2(1, 0);
-  static readonly Y_ASIS = new Vector2(0, 1);
-  static readonly INV_X_ASIS = new Vector2(-1, 0);
-  static readonly INV_Y_ASIS = new Vector2(0, -1);
+  static readonly X_AXIS = new Vector2(1, 0);
+  static readonly Y_AXIS = new Vector2(0, 1);
+  static readonly INV_X_AXIS = new Vector2(-1, 0);
+  static readonly INV_Y_AXIS = new Vector2(0, -1);
   static readonly ZERO = new Vector2(0, 0);
 
   x: number = 0;
