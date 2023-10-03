@@ -20,7 +20,7 @@ export class Circle extends AbstractShape implements Convex, Shape, Transformabl
 
   private static validate(radius: number): boolean {
     if (radius <= 0) {
-      throw new Error("Circle: Radius must be non-negative.");
+      throw new Error("Circle: Radius must be positive.");
     }
     return true;
   }

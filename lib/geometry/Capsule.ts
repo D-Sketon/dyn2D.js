@@ -54,10 +54,10 @@ export class Capsule extends AbstractShape implements Convex, Shape, Transformab
 
   private static validate(width: number, height: number): boolean {
     if (width <= 0) {
-      throw new Error("Capsule: Width must be non-negative.");
+      throw new Error("Capsule: Width must be positive.");
     }
     if (height <= 0) {
-      throw new Error("Capsule: Height must be non-negative.");
+      throw new Error("Capsule: Height must be positive.");
     }
     if (Math.abs(width - height) < Epsilon.E) {
       throw new Error("Capsule: Width and height must be different.");
@@ -73,7 +73,7 @@ export class Capsule extends AbstractShape implements Convex, Shape, Transformab
     if (center == null) {
       return super.getRadius();
     }
-    return getRotationRadius(center, ...this.foci) + this.capRadius;
+    return getRotationRadius(center, this.foci) + this.capRadius;
   }
 
   public getAxes(foci: Vector2[], transform: Transform): Vector2[] {

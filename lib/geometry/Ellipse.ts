@@ -32,10 +32,10 @@ export class Ellipse extends AbstractShape implements Convex, Shape, Transformab
 
   public static validate(width: number, height: number): boolean {
     if (width <= 0) {
-      throw new Error("Ellipse: Width must be non-negative.");
+      throw new Error("Ellipse: Width must be positive.");
     }
     if (height <= 0) {
-      throw new Error("Ellipse: Height must be non-negative.");
+      throw new Error("Ellipse: Height must be positive.");
     }
     return true;
   }

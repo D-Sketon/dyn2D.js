@@ -8,6 +8,8 @@ describe('Polygon', () => {
   const Polygon = require('../../dist/geometry/Polygon').Polygon;
   const Vector2 = require('../../dist/geometry/Vector2').Vector2;
   const Transform = require('../../dist/geometry/Transform').Transform;
+  const MassType = require('../../dist/geometry/MassType').MassType;
+  const { createUnitCirclePolygon } = require('../../dist/geometry/Geometry');
   const IDENTITY = new Transform();
 
   it('createNotEnoughPoints', () => {
@@ -377,23 +379,23 @@ describe('Polygon', () => {
   });
 
   it('createMass', () => {
-    // const p = createUnitCirclePolygon(5, 0.5);
-    // const m = p.createMass(1.0);
-    // m.getMass().should.closeTo(0.594, 1.0e-3);
-    // m.getInertia().should.closeTo(0.057, 1.0e-3);
+    const p = createUnitCirclePolygon(5, 0.5);
+    const m = p.createMass(1.0);
+    m.getMass().should.closeTo(0.594, 1.0e-3);
+    m.getInertia().should.closeTo(0.057, 1.0e-3);
 
-    // const m2 = p.createMass(0);
-    // m2.getMass().should.closeTo(0.000, 1.0e-3);
-    // m2.getInertia().should.closeTo(0.000, 1.0e-3);
-    // m2.getInverseMass().should.closeTo(0.000, 1.0e-3);
-    // m2.getInverseInertia().should.closeTo(0.000, 1.0e-3);
-    // m2.getCenter().x.should.closeTo(0.000, 1.0e-3);
-    // m2.getCenter().y.should.closeTo(0.000, 1.0e-3);
-    // m2.getType().should.equal(MassType.INFINITE);
+    const m2 = p.createMass(0);
+    m2.getMass().should.closeTo(0.000, 1.0e-3);
+    m2.getInertia().should.closeTo(0.000, 1.0e-3);
+    m2.getInverseMass().should.closeTo(0.000, 1.0e-3);
+    m2.getInverseInertia().should.closeTo(0.000, 1.0e-3);
+    m2.getCenter().x.should.closeTo(0.000, 1.0e-3);
+    m2.getCenter().y.should.closeTo(0.000, 1.0e-3);
+    m2.getType().should.equal(MassType.INFINITE);
   });
 
   it('getArea', () => {
-    // const p = createUnitCirclePolygon(5, 0.5);
-    // p.getArea().should.closeTo(0.594, 1.0e-3);
+    const p = createUnitCirclePolygon(5, 0.5);
+    p.getArea().should.closeTo(0.594, 1.0e-3);
   });
 });

@@ -13,7 +13,7 @@ describe('Capsule', () => {
     try {
       new Capsule(0.0, 1.0);
     } catch (e) {
-      e.message.should.equal('Capsule: Width must be non-negative.');
+      e.message.should.equal('Capsule: Width must be positive.');
     }
   });
 
@@ -21,7 +21,7 @@ describe('Capsule', () => {
     try {
       new Capsule(-1.0, 1.0);
     } catch (e) {
-      e.message.should.equal('Capsule: Width must be non-negative.');
+      e.message.should.equal('Capsule: Width must be positive.');
     }
   });
 
@@ -29,7 +29,7 @@ describe('Capsule', () => {
     try {
       new Capsule(1.0, 0.0);
     } catch (e) {
-      e.message.should.equal('Capsule: Height must be non-negative.');
+      e.message.should.equal('Capsule: Height must be positive.');
     }
   });
 
@@ -37,7 +37,7 @@ describe('Capsule', () => {
     try {
       new Capsule(1.0, -1.0);
     } catch (e) {
-      e.message.should.equal('Capsule: Height must be non-negative.');
+      e.message.should.equal('Capsule: Height must be positive.');
     }
   });
 

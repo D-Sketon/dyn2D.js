@@ -14,10 +14,10 @@ import { Wound } from "./Wound";
 
 function validate(width: number, height: number): boolean {
   if (width <= 0) {
-    throw new Error("Rectangle: Width must be non-negative.");
+    throw new Error("Rectangle: Width must be positive.");
   }
   if (height <= 0) {
-    throw new Error("Rectangle: Height must be non-negative.");
+    throw new Error("Rectangle: Height must be positive.");
   }
   return true;
 }

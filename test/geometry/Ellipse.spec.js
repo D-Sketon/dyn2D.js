@@ -13,7 +13,7 @@ describe('Ellipse', () => {
     try {
       new Ellipse(0.0, 1.0);
     } catch (e) {
-      e.message.should.equal('Ellipse: Width must be non-negative.');
+      e.message.should.equal('Ellipse: Width must be positive.');
     }
   });
 
@@ -21,7 +21,7 @@ describe('Ellipse', () => {
     try {
       new Ellipse(-1.0, 1.0);
     } catch (e) {
-      e.message.should.equal('Ellipse: Width must be non-negative.');
+      e.message.should.equal('Ellipse: Width must be positive.');
     }
   });
 
@@ -29,7 +29,7 @@ describe('Ellipse', () => {
     try {
       new Ellipse(1.0, 0.0);
     } catch (e) {
-      e.message.should.equal('Ellipse: Height must be non-negative.');
+      e.message.should.equal('Ellipse: Height must be positive.');
     }
   });
 
@@ -37,7 +37,7 @@ describe('Ellipse', () => {
     try {
       new Ellipse(1.0, -1.0);
     } catch (e) {
-      e.message.should.equal('Ellipse: Height must be non-negative.');
+      e.message.should.equal('Ellipse: Height must be positive.');
     }
   });
 

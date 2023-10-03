@@ -234,8 +234,8 @@ describe('BinarySearchTree', () => {
 
   it('nodeNullComparable', () => {
     try {
-      new BinarySearchTreeNode<Integer>(null);
-    } catch(e) {
+      new BinarySearchTreeNode < Integer > (null);
+    } catch (e) {
       e.message.should.equal('BinarySearchTreeNode: comparable');
     }
   });
@@ -322,7 +322,7 @@ describe('BinarySearchTree', () => {
     while (it.hasNext()) {
       const i = it.next();
       if (i < last) {
-        //
+        throw new Error('The next item was not greater than the last. In order traversal failed.');
       }
       last = i;
     }
@@ -331,8 +331,7 @@ describe('BinarySearchTree', () => {
     while (it.hasNext()) {
       const i = it.next();
       if (i > last) {
-        //
-
+        throw new Error('The next item was not less than the last. Reverse order traversal failed.');
       }
       last = i;
     }

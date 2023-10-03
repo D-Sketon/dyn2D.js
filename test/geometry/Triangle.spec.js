@@ -6,7 +6,6 @@ describe('Triangle', () => {
   const Triangle = require('../../dist/geometry/Triangle').Triangle;
   const Transform = require('../../dist/geometry/Transform').Transform;
   const Vector2 = require('../../dist/geometry/Vector2').Vector2;
-  const MassType = require('../../dist/geometry/MassType').MassType;
 
   it('createNullPoint1', () => {
     try {

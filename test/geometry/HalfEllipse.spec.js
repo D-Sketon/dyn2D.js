@@ -13,7 +13,7 @@ describe('HalfEllipse', () => {
     try {
       new HalfEllipse(0.0, 1.0);
     } catch (e) {
-      e.message.should.equal('HalfEllipse: Width must be non-negative.');
+      e.message.should.equal('HalfEllipse: Width must be positive.');
     }
   });
 
@@ -21,7 +21,7 @@ describe('HalfEllipse', () => {
     try {
       new HalfEllipse(-1.0, 1.0);
     } catch (e) {
-      e.message.should.equal('HalfEllipse: Width must be non-negative.');
+      e.message.should.equal('HalfEllipse: Width must be positive.');
     }
   });
 
@@ -29,7 +29,7 @@ describe('HalfEllipse', () => {
     try {
       new HalfEllipse(1.0, 0.0);
     } catch (e) {
-      e.message.should.equal('HalfEllipse: Height must be non-negative.');
+      e.message.should.equal('HalfEllipse: Height must be positive.');
     }
   });
 
@@ -37,7 +37,7 @@ describe('HalfEllipse', () => {
     try {
       new HalfEllipse(1.0, -1.0);
     } catch (e) {
-      e.message.should.equal('HalfEllipse: Height must be non-negative.');
+      e.message.should.equal('HalfEllipse: Height must be positive.');
     }
   });
   it('createSuccess', () => {

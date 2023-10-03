@@ -12,7 +12,7 @@ describe('Rectangle', () => {
     try {
       new Rectangle(-1.0, 3.0);
     } catch (e) {
-      e.message.should.equal('Rectangle: Width must be non-negative.');
+      e.message.should.equal('Rectangle: Width must be positive.');
     }
   });
 
@@ -20,7 +20,7 @@ describe('Rectangle', () => {
     try {
       new Rectangle(2.0, 0.0);
     } catch (e) {
-      e.message.should.equal('Rectangle: Height must be non-negative.');
+      e.message.should.equal('Rectangle: Height must be positive.');
     }
   });
 

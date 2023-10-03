@@ -34,7 +34,7 @@ export class Polygon extends AbstractShape implements Convex, Wound, Shape, Tran
       const vertices = args as Vector2[];
       Polygon.validate(vertices);
       const center = getAreaWeightedCenter(vertices);
-      super(center, getRotationRadius(center, ...vertices));
+      super(center, getRotationRadius(center, vertices));
       this.vertices = vertices;
       this.normals = getCounterClockwiseEdgeNormals(...vertices);
     }
@@ -246,7 +246,7 @@ export class Polygon extends AbstractShape implements Convex, Wound, Shape, Tran
 
   public getRadius(center?: Vector2): number {
     if (center != null)
-      return getRotationRadius(center, ...this.vertices);
+      return getRotationRadius(center, this.vertices);
     return super.getRadius();
   }
 

@@ -152,7 +152,7 @@ export class Segment extends AbstractShape implements Convex, Wound, Shape, Tran
 
   public getRadius(center?: Vector2): number {
     if (center != null)
-      return getRotationRadius(center, ...this.vertices);
+      return getRotationRadius(center, this.vertices);
     return super.getRadius();
   }
 

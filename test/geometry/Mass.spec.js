@@ -6,6 +6,7 @@ describe('Mass', () => {
   const Mass = require('../../dist/geometry/Mass').Mass;
   const MassType = require('../../dist/geometry/MassType').MassType;
   const Vector2 = require('../../dist/geometry/Vector2').Vector2;
+  const { createCircle } = require('../../dist/geometry/Geometry');
 
   it('createNegativeMass', () => {
     try {
@@ -165,7 +166,36 @@ describe('Mass', () => {
   });
 
   it('setType', () => {
-    // TODO test this
+    const c = createCircle(2.0);
+    const mi = c.createMass(1.0);
+
+    mi.setType(MassType.INFINITE);
+    mi.isInfinite().should.equal(true);
+    mi.mass.should.not.equal(0.0);
+    mi.invMass.should.not.equal(0.0);
+    mi.inertia.should.not.equal(0.0);
+    mi.invInertia.should.not.equal(0.0);
+
+    mi.getMass().should.equal(0.0);
+    mi.getInverseMass().should.equal(0.0);
+    mi.getInertia().should.equal(0.0);
+    mi.getInverseInertia().should.equal(0.0);
+
+    mi.setType(MassType.FIXED_ANGULAR_VELOCITY);
+    mi.mass.should.not.equal(0.0);
+    mi.invMass.should.not.equal(0.0);
+    mi.inertia.should.not.equal(0.0);
+    mi.invInertia.should.not.equal(0.0);
+    mi.getInertia().should.equal(0.0);
+    mi.getInverseInertia().should.equal(0.0);
+
+    mi.setType(MassType.FIXED_LINEAR_VELOCITY);
+    mi.mass.should.not.equal(0.0);
+    mi.invMass.should.not.equal(0.0);
+    mi.inertia.should.not.equal(0.0);
+    mi.invInertia.should.not.equal(0.0);
+    mi.getMass().should.equal(0.0);
+    mi.getInverseMass().should.equal(0.0);
   });
 
   it('setNullType', () => {

@@ -42,10 +42,10 @@ export class HalfEllipse extends AbstractShape implements Convex, Shape, Transfo
 
   private static validate(width: number, height: number): boolean {
     if (width <= 0) {
-      throw new Error("HalfEllipse: Width must be non-negative.");
+      throw new Error("HalfEllipse: Width must be positive.");
     }
     if (height <= 0) {
-      throw new Error("HalfEllipse: Height must be non-negative.");
+      throw new Error("HalfEllipse: Height must be positive.");
     }
     return true;
   }

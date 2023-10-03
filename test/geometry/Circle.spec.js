@@ -13,7 +13,7 @@ describe('Circle', () => {
     try {
       new Circle(0.0);
     } catch (e) {
-      e.message.should.equal('Circle: Radius must be non-negative.');
+      e.message.should.equal('Circle: Radius must be positive.');
     }
   });
 
@@ -21,7 +21,7 @@ describe('Circle', () => {
     try {
       new Circle(-1.0);
     } catch (e) {
-      e.message.should.equal('Circle: Radius must be non-negative.');
+      e.message.should.equal('Circle: Radius must be positive.');
     }
   });
 
