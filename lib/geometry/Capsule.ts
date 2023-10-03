@@ -40,7 +40,7 @@ export class Capsule extends AbstractShape implements Convex, Shape, Transformab
     this.capRadius = minor * 0.5;
 
     const f = (major - minor) * 0.5;
-    this.foci = new Vector2[2];
+    this.foci = [];
     if (vertical) {
       this.foci[0] = new Vector2(0, -f);
       this.foci[1] = new Vector2(0, f);
@@ -54,13 +54,13 @@ export class Capsule extends AbstractShape implements Convex, Shape, Transformab
 
   private static validate(width: number, height: number): boolean {
     if (width <= 0) {
-      throw new Error("Rectangle: Width must be non-negative.");
+      throw new Error("Capsule: Width must be non-negative.");
     }
     if (height <= 0) {
-      throw new Error("Rectangle: Height must be non-negative.");
+      throw new Error("Capsule: Height must be non-negative.");
     }
     if (Math.abs(width - height) < Epsilon.E) {
-      throw new Error("Rectangle: Width and height must be different.");
+      throw new Error("Capsule: Width and height must be different.");
     }
     return true;
   }
@@ -172,7 +172,7 @@ export class Capsule extends AbstractShape implements Convex, Shape, Transformab
   }
 
   public contains(point: Vector2, transform?: Transform, inclusive?: boolean): boolean {
-    if (transform == null || inclusive == null) {
+    if (transform == null || inclusive === void 0) {
       return super.contains(point, transform, inclusive);
     }
     const p = Segment.getPointOnSegmentClosestToPoint(point, transform.getTransformed(this.foci[0]), transform.getTransformed(this.foci[1]));

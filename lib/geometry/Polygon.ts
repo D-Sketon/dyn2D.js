@@ -251,7 +251,7 @@ export class Polygon extends AbstractShape implements Convex, Wound, Shape, Tran
   }
 
   public contains(point: Vector2, transform?: Transform, inclusive?: boolean): boolean {
-    if (transform == null || inclusive == null) {
+    if (transform == null || inclusive === void 0) {
       return super.contains(point, transform, inclusive);
     }
     const p = transform.getInverseTransformed(point);

@@ -96,7 +96,7 @@ export class Rectangle extends Polygon implements Convex, Wound, Shape, Transfor
   }
 
   public contains(point: Vector2, transform?: Transform, inclusive?: boolean): boolean {
-    if (transform == null && inclusive == null || inclusive == null) {
+    if (transform === void 0 && inclusive === void 0 || inclusive !== void 0) {
       return super.contains(point, transform, inclusive);
     }
     const p = transform.getInverseTransformed(point);

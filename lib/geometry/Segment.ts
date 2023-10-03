@@ -269,7 +269,7 @@ export class Segment extends AbstractShape implements Convex, Wound, Shape, Tran
   public contains(point: Vector2, transform: Transform, inclusive: boolean): boolean;
   public contains(point: Vector2, transform: Transform, radius: number): boolean;
   public contains(point: Vector2, transform?: Transform, inclusive?: boolean | number): boolean {
-    if (transform == null || inclusive == null) {
+    if (transform == null || inclusive === void 0) {
       return super.contains(point, transform, inclusive as boolean);
     }
     if (typeof inclusive === "number") {

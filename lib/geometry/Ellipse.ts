@@ -213,7 +213,7 @@ export class Ellipse extends AbstractShape implements Convex, Shape, Transformab
   }
 
   public contains(point: Vector2, transform?: Transform, inclusive?: boolean): boolean {
-    if (transform == null || inclusive == null) {
+    if (transform == null || inclusive === void  0) {
       return super.contains(point, transform, inclusive);
     }
     const localPoint = transform.getInverseTransformed(point);

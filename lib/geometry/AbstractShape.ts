@@ -50,7 +50,7 @@ export abstract class AbstractShape implements Shape {
   contains(point: Vector2, transform: Transform): boolean;
   contains(point: Vector2, transform: Transform, inclusive: boolean): boolean;
   contains(point: Vector2, transform?: Transform, inclusive?: boolean): boolean {
-    if (transform == null && inclusive == null) {
+    if (transform == null && inclusive === void 0) {
       return this.contains(point, AbstractShape.IDENTITY, true);
     }
     if (inclusive == null) {
@@ -101,7 +101,7 @@ export abstract class AbstractShape implements Shape {
     } else if (rotation instanceof Rotation) {
       this.rotate(rotation, 0.0, 0.0);
     } else if (typeof rotation === "number") {
-      this.rotate(rotation, 0, 0);
+      this.rotate(rotation, 0.0, 0.0);
     }
   }
 
