@@ -28,21 +28,21 @@ export class AABB implements Translatable, Copyable<AABB> {
   /**
    * Full constructor.
    * @param radius The radius of a circle fitting inside the {@link AABB}.
-   * @throws RangeError if the radius is negative.
+   * @throws `RangeError` if the radius is negative.
    */
   constructor(radius: number);
   /**
    * Full constructor.
    * @param center The center of the circle.
    * @param radius The radius of a circle fitting inside the {@link AABB}.
-   * @throws RangeError if the radius is negative.
+   * @throws `RangeError`` if the radius is negative.
    */
   constructor(center: Vector2 | null, radius: number);
   /**
    * Full constructor.
    * @param min The minimum extent of the {@link AABB}.
    * @param max The maximum extent of the {@link AABB}.
-   * @throws RangeError if the minimum X-coordinate is greater than the maximum X-coordinate.
+   * @throws `RangeError` if the minimum X-coordinate is greater than the maximum X-coordinate.
    */
   constructor(min: Vector2, max: Vector2);
   /**
@@ -51,8 +51,8 @@ export class AABB implements Translatable, Copyable<AABB> {
    * @param minY The minimum extent along the Y-axis coordinate of the {@link AABB}.
    * @param maxX The maximum extent along the X-axis coordinate of the {@link AABB}.
    * @param maxY The maximum extent along the Y-axis coordinate of the {@link AABB}.
-   * @throws RangeError if the minimum X-coordinate is greater than the maximum X-coordinate.
-   * @throws RangeError if the minimum Y-coordinate is greater than the maximum Y-coordinate.
+   * @throws `RangeError` if the minimum X-coordinate is greater than the maximum X-coordinate.
+   * @throws `RangeError` if the minimum Y-coordinate is greater than the maximum Y-coordinate.
    */
   constructor(minX: number, minY: number, maxX: number, maxY: number);
   /**
@@ -188,9 +188,6 @@ export class AABB implements Translatable, Copyable<AABB> {
     }
   }
 
-  /**
-   * @see {@link Copyable.copy}
-   */
   public copy(): AABB {
     return new AABB(this);
   }
@@ -232,16 +229,7 @@ export class AABB implements Translatable, Copyable<AABB> {
       && this.maxX === aabb.maxX && this.maxY === aabb.maxY;
   }
 
-  /**
-   * @param vector The {@link Vector2} to translate this {@link AABB} by.
-   * @see {@link Translatable.translate}
-   */
   public translate(vector: Vector2): void;
-  /**
-   * @param x The X-coordinate to translate this {@link AABB} by.
-   * @param y The Y-coordinate to translate this {@link AABB} by.
-   * @see {@link Translatable.translate}
-   */
   public translate(x: number, y: number): void;
   public translate(x: unknown, y?: unknown): void {
     if (x instanceof Vector2) {

@@ -6,14 +6,41 @@ import { Interval } from "./Interval";
 import { Mass } from "./Mass";
 import { Rotation } from "./Rotation";
 
+/**
+ * Base implementation of the {@link Shape} interface.
+ */
 export abstract class AbstractShape implements Shape {
+  /**
+   * The identity transform.
+   */
   static readonly IDENTITY: Transform = new Transform();
 
+  /**
+   * The center of this shape.
+   */
   center: Vector2;
+  /**
+   * The maximum radius of this shape.
+   */
   radius: number;
+  /**
+   * The custom user data.
+   */
   userData: any;
 
+  /**
+   * Minimal constructor.
+   * @param radius The rotation radius of the shape; must be greater than zero
+   * @throws `RangeError` if the radius is less than or equal to zero
+   */
   constructor(radius: number);
+  /**
+   * Full constructor.
+   * @param center The center of the shape
+   * @param radius The rotation radius of the shape; must be greater than zero
+   * @throws `RangeError` if the radius is less than or equal to zero
+   * @throws `TypeError` if the center is `null` or `undefined`
+   */
   constructor(center: Vector2, radius: number);
   constructor(center: Vector2 | number, radius?: number) {
     if (typeof center === "number") {
@@ -50,10 +77,10 @@ export abstract class AbstractShape implements Shape {
   contains(point: Vector2, transform: Transform): boolean;
   contains(point: Vector2, transform: Transform, inclusive: boolean): boolean;
   contains(point: Vector2, transform?: Transform, inclusive?: boolean): boolean {
-    if (transform == null && inclusive === void 0) {
+    if (transform === void 0 && inclusive === void 0) {
       return this.contains(point, AbstractShape.IDENTITY, true);
     }
-    if (inclusive == null) {
+    if (inclusive === void 0) {
       return this.contains(point, transform, true);
     }
   }
@@ -65,7 +92,7 @@ export abstract class AbstractShape implements Shape {
   createAABB(): AABB;
   createAABB(transform: Transform): AABB;
   createAABB(transform?: Transform): AABB {
-    if (transform == null) {
+    if (transform === void 0) {
       return this.createAABB(AbstractShape.IDENTITY);
     }
     const aabb = new AABB(0, 0, 0, 0);
@@ -76,7 +103,7 @@ export abstract class AbstractShape implements Shape {
   computeAABB(aabb: AABB): void;
   computeAABB(aabb: AABB, transform: Transform): void;
   computeAABB(aabb: AABB, transform?: Transform): void {
-    if (transform == null) {
+    if (transform === void 0) {
       this.computeAABB(aabb, AbstractShape.IDENTITY);
     }
   }
