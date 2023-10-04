@@ -22,11 +22,25 @@ function validate(width: number, height: number): boolean {
   return true;
 }
 
+/**
+ * Implementation of a Rectangle {@link Convex} {@link Shape}.
+ */
 export class Rectangle extends Polygon implements Convex, Wound, Shape, Transformable, DataContainer {
 
+  /**
+   * The width of {@link Rectangle}
+   */
   width: number;
+  /**
+   * The height of {@link Rectangle}
+   */
   height: number;
 
+  /**
+   * Full constructor.
+   * @param width The width of {@link Rectangle}
+   * @param height The height of {@link Rectangle}
+   */
   constructor(width: number, height: number) {
     validate(width, height);
     const vertices = [
@@ -51,6 +65,10 @@ export class Rectangle extends Polygon implements Convex, Wound, Shape, Transfor
     return `Rectangle[${super.toString()}, width=${this.width}, height=${this.height}]]`;
   }
 
+  /**
+   * 
+   * @returns The width of {@link Rectangle}
+   */
   public getHeight(): number {
     return this.height;
   }

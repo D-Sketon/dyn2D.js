@@ -184,11 +184,11 @@ export class Mass implements Copyable<Mass>{
    * Method to set the {@link MassType} of this {@link Mass}.
    * 
    * NOTE: This method will only set the MassType when it's valid to do so. The following logic describes this:
-	 * <ul>
-	 * <li>The given type is {@link MassType.NORMAL} and both the mass and inertia are non-zero</li>
-	 * <li>The given type is {@link MassType.FIXED_LINEAR_VELOCITY} and inertia is non-zero</li>
-	 * <li>The given type is {@link MassType.FIXED_ANGULAR_VELOCITY} and the mass is non-zero</li>
-	 * </ul>
+   * 
+	 * - The given type is {@link MassType.NORMAL} and both the mass and inertia are non-zero</li>
+	 * - The given type is {@link MassType.FIXED_LINEAR_VELOCITY} and inertia is non-zero</li>
+	 * - The given type is {@link MassType.FIXED_ANGULAR_VELOCITY} and the mass is non-zero</li>
+	 * 
 	 * Otherwise, the operation will be ignored and the current mass type left as is.
    * @param type The {@link MassType} to set
    * @throws `TypeError` if type is null

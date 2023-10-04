@@ -15,17 +15,54 @@ import { Transform } from "./Transform";
 import { Transformable } from "./Transformable";
 import { Vector2 } from "./Vector2";
 
+/**
+ * Implementation of an Half-Ellipse {@link Convex} {@link Shape}.
+ * 
+ * A half ellipse must have a width and height greater than zero and the height
+ * parameter is the height of the half.
+ * 
+ * **This shape is only supported by the GJK collision detection algorithm**
+ */
 export class HalfEllipse extends AbstractShape implements Convex, Shape, Transformable, DataContainer {
-
+  /**
+   * The half ellipse inertia constant.
+   * 
+   * @see <a href="http://www.efunda.com/math/areas/ellipticalhalf.cfm" target=
+   *      "_blank">Elliptical Half</a>
+   */
   static readonly INERTIA_CONSTANT = Math.PI / 8.0 - 8.0 / (9.0 * Math.PI);
 
+  /**
+   * The half-height
+   */
   halfWidth: number;
+  /**
+   * The {@link Ellipse} height
+   */
   height: number;
+  /**
+   * The local rotation
+   */
   rotation: Rotation;
+  /**
+   * The {@link Ellipse} center
+   */
   ellipseCenter: Vector2;
+  /**
+   * The first vertex of the bottom
+   */
   vertexLeft: Vector2;
+  /**
+   * The second vertex of the bottom
+   */
   vertexRight: Vector2;
 
+  /**
+   * Full constructor.
+   * @param width The width
+   * @param height The height of the half
+   * @throws `Error` if either the width or height is less than or equal to zero
+   */
   constructor(width: number, height: number) {
     HalfEllipse.validate(width, height);
     const center = new Vector2(0, (4.0 * height) / (3.0 * Math.PI));
@@ -147,10 +184,21 @@ export class HalfEllipse extends AbstractShape implements Convex, Shape, Transfo
     }
   }
 
+  /**
+   * This method is not supported by this shape.
+   * @param foci any
+   * @param transform any
+   * @throws `Error` SAT does not support the {@link HalfEllipse} shape.
+   */
   public getAxes(foci: Vector2[], transform: Transform): Vector2[] {
     throw new Error("HalfEllipse: SAT does not support the HalfEllipse shape.");
   }
 
+  /**
+   * This method is not supported by this shape.
+   * @param transform any
+   * @throws `Error` SAT does not support the {@link HalfEllipse} shape.
+   */
   public getFoci(transform: Transform): Vector2[] {
     throw new Error("HalfEllipse: SAT does not support the HalfEllipse shape.");
   }
@@ -302,7 +350,7 @@ export class HalfEllipse extends AbstractShape implements Convex, Shape, Transfo
     }
   }
 
-  rotate(rotation: unknown, x?: unknown, y?: unknown): void {
+  public rotate(rotation: unknown, x?: unknown, y?: unknown): void {
     if (rotation instanceof Rotation && typeof x === "number" && typeof y === "number") {
       super.rotate(rotation, x, y);
       this.rotation.rotate(rotation);
@@ -326,26 +374,50 @@ export class HalfEllipse extends AbstractShape implements Convex, Shape, Transfo
     }
   }
 
+  /**
+   * Returns the rotation about the local center in radians in the range [-&pi;, &pi;].
+   * @returns The rotation angle in radians
+   */
   public getRotationAngle(): number {
     return this.rotation.toRadians();
   }
 
+  /**
+   * Returns the {@link Rotation} object that represents the local center.
+   * @returns The {@link Rotation} object that represents the local center
+   */
   public getRotation(): Rotation {
     return this.rotation.copy();
   }
 
+  /**
+   * Return the width.
+   * @returns The width
+   */
   public getWidth(): number {
     return this.halfWidth * 2;
   }
 
+  /**
+   * Returns the height.
+   * @returns The height
+   */
   public getHeight(): number {
     return this.height;
   }
 
+  /**
+   * Returns the half width.
+   * @returns The half width
+   */
   public getHalfWidth(): number {
     return this.halfWidth;
   }
 
+  /**
+   * Returns the center of the {@link Ellipse}.
+   * @returns The center of the {@link Ellipse}
+   */
   public getEllipseCenter(): Vector2 {
     return this.ellipseCenter;
   }

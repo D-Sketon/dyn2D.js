@@ -4,7 +4,6 @@ import { AABB } from "./AABB";
 import { AbstractShape } from "./AbstractShape";
 import { Convex } from "./Convex";
 import { EdgeFeature } from "./EdgeFeature";
-import { Feature } from "./Feature";
 import { INV_3, getAreaWeightedCenter, getCounterClockwiseEdgeNormals, getRotationRadius } from "./Geometry";
 import { Interval } from "./Interval";
 import { Mass } from "./Mass";
@@ -18,12 +17,34 @@ import { Vector2 } from "./Vector2";
 import { Wound } from "./Wound";
 import { WoundIterator } from "./WoundIterator";
 
+/**
+ * Implementation of an arbitrary polygon {@link Convex} {@link Shape}.
+ */
 export class Polygon extends AbstractShape implements Convex, Wound, Shape, Transformable, DataContainer {
 
+  /**
+   * The vertices of the {@link Polygon}.
+   */
   vertices: Vector2[];
+  /**
+   * The normals of the {@link Polygon}.
+   */
   normals: Vector2[];
 
+  /**
+   * Full constructor.
+   * @param vertices The vertices of the {@link Polygon}.
+   * @throws `Error` if vertices is null or contains a null element.
+   * @throws `Error` if vertices has less than 3 elements, contains coincident points, is not convex, or has clockwise winding
+   */
   constructor(...vertices: Vector2[]);
+  /**
+   * Full constructor.
+   * @param center The center of the {@link Polygon}.
+   * @param radius The rotation radius of the {@link Polygon}.
+   * @param vertices The vertices of the {@link Polygon}.
+   * @param normals The normals of the {@link Polygon}.
+   */
   constructor(center: Vector2, radius: number, vertices: Vector2[], normals: Vector2[]);
   constructor(...args: any[]) {
     if (args.length === 4 && args[0] instanceof Vector2 && typeof args[1] === "number" && Array.isArray(args[2]) && Array.isArray(args[3])) {

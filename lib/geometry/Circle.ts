@@ -11,8 +11,18 @@ import { Transform } from "./Transform";
 import { Transformable } from "./Transformable";
 import { Vector2 } from "./Vector2";
 
+/**
+ * Implementation of a Circle {@link Convex} {@link Shape}.
+ * 
+ * A {@link Circle}'s radius must be greater than zero.
+ */
 export class Circle extends AbstractShape implements Convex, Shape, Transformable, DataContainer {
 
+  /**
+   * Full constructor.
+   * @param radius The radius of the {@link Circle}.
+   * @throws `Error` if the radius is less than or equal to zero.
+   */
   constructor(radius: number) {
     Circle.validate(radius);
     super(radius);
@@ -36,6 +46,14 @@ export class Circle extends AbstractShape implements Convex, Shape, Transformabl
     return `Circle[center=${this.center.toString()}, radius=${this.radius}]`;
   }
 
+  /**
+	 * Circular shapes are handled specifically in the SAT algorithm since
+	 * they have an infinite number of axes. As a result this method returns
+	 * null.
+   * @param foci any
+   * @param transform any
+   * @returns null
+   */
   public getAxes(foci: Vector2[], transform: Transform): Vector2[] {
     return null;
   }

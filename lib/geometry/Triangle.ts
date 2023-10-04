@@ -7,8 +7,19 @@ import { Transformable } from "./Transformable";
 import { Vector2 } from "./Vector2";
 import { Wound } from "./Wound";
 
+/**
+ * Implementation of a Triangle {@link Convex} {@link Shape}.
+ */
 export class Triangle extends Polygon implements Convex, Wound, Shape, Transformable, DataContainer {
 
+  /**
+   * Full constructor.
+   * @param point1 The first point
+   * @param point2 The second point
+   * @param point3 The third point
+   * @throws `Error` if point1, point2, or point3 is null
+   * @throws `Error` if point1, point2, and point3 contain coincident points or has clockwise winding
+   */
   constructor(point1: Vector2, point2: Vector2, point3: Vector2) {
     super(point1, point2, point3);
   }

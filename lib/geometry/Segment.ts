@@ -17,11 +17,29 @@ import { Vector2 } from "./Vector2";
 import { Wound } from "./Wound";
 import { WoundIterator } from "./WoundIterator";
 
+/**
+ * Implementation of a Line Segment {@link Convex} {@link Shape}.
+ */
 export class Segment extends AbstractShape implements Convex, Wound, Shape, Transformable, DataContainer {
+  /**
+   * The vertices of the {@link Segment}.
+   */
   vertices: Vector2[];
+  /**
+   * The normals of the {@link Segment}.
+   */
   normals: Vector2[];
+  /**
+   * The length of the {@link Segment}.
+   */
   length: number;
 
+  /**
+   * Full constructor.
+   * @param point1 The first point
+   * @param point2 The second point
+   * @throws `Error` if either point is null or coincident
+   */
   constructor(point1: Vector2, point2: Vector2) {
     Segment.validate(point1, point2);
     const vertices = [point1, point2];
@@ -156,23 +174,66 @@ export class Segment extends AbstractShape implements Convex, Wound, Shape, Tran
     return super.getRadius();
   }
 
+  /**
+   * Returns point1 in local coordinates.
+   * @returns Point1 in local coordinates.
+   */
   public getPoint1(): Vector2 {
     return this.vertices[0];
   }
 
+  /**
+   * Returns point2 in local coordinates.
+   * @returns Point2 in local coordinates.
+   */
   public getPoint2(): Vector2 {
     return this.vertices[1];
   }
 
+  /**
+   * Returns the length of the {@link Segment}.
+   * @returns The length of the {@link Segment}.
+   */
   public getLength(): number {
     return this.length;
   }
 
+  /**
+	 * Determines where the point is relative to the given line.
+	 * <p style="white-space: pre;"> Set L = linePoint2 - linePoint1
+	 * Set P = point - linePoint1
+	 * location = L.cross(P)</p>
+	 * Returns 0 if the point lies on the line created from the line segment.<br>
+	 * Assuming a right handed coordinate system:<br>
+	 * Returns &lt; 0 if the point lies on the right side of the line<br>
+	 * Returns &gt; 0 if the point lies on the left side of the line
+   * 
+	 * Assumes all points are in world space.
+	 * @param point The point
+	 * @param linePoint1 The first point of the line
+	 * @param linePoint2 The second point of the line
+   * @returns The location of the point relative to the line
+   * @throws `Error` if any point is null
+	 */
   public static getLocation(point: Vector2, linePoint1: Vector2, linePoint2: Vector2): number {
     return (linePoint2.x - linePoint1.x) * (point.y - linePoint1.y) -
       (point.x - linePoint1.x) * (linePoint2.y - linePoint1.y);
   }
 
+  /**
+	 * Returns the point on the given line closest to the given point.
+   * 
+	 * Project the point onto the line:
+	 * <p style="white-space: pre;"> V<sub>line</sub> = P<sub>1</sub> - P<sub>0</sub>
+	 * V<sub>point</sub> = P<sub>0</sub> - P
+	 * P<sub>closest</sub> = V<sub>point</sub>.project(V<sub>line</sub>)</p>
+	 * Assumes all points are in world space.
+	 * @param point The point
+	 * @param linePoint1 The first point of the line
+	 * @param linePoint2 The second point of the line
+   * @returns The point on the line closest to the given point
+   * @throws `Error` if any point is null
+	 */
   public static getPointOnLineClosestToPoint(point: Vector2, linePoint1: Vector2, linePoint2: Vector2): Vector2 {
     const p1ToP = point.difference(linePoint1);
     const line = linePoint2.difference(linePoint1);
@@ -183,10 +244,33 @@ export class Segment extends AbstractShape implements Convex, Wound, Shape, Tran
     return line.multiply(t).add(linePoint1);
   }
 
+	/**
+	 * Returns the point on the <b>line</b> that this {@link Segment} 
+	 * defines closest to the given point.
+   * 
+	 * This method works in this {@link Segment}'s local space.
+	 * @param point The local space point
+   * @returns The point on the line closest to the given point
+   * @throws `Error` if the point is null
+	 */
   public getPointOnLineClosestToPoint(point: Vector2): Vector2 {
     return Segment.getPointOnLineClosestToPoint(point, this.vertices[0], this.vertices[1]);
   }
 
+	/**
+	 * Returns the point on the given line segment closest to the given point.
+   * 
+	 * If the point closest to the given point is on the line created by the
+	 * given line segment, but is not on the line segment then either of the segments
+	 * end points will be returned.
+	 * <p>
+	 * Assumes all points are in world space.
+	 * @param point The point
+	 * @param linePoint1 The first point of the line
+	 * @param linePoint2 The second point of the line
+	 * @return The point on the line closest to the given point
+	 * @throws `Error` if any point is null
+	 */
   public static getPointOnSegmentClosestToPoint(point: Vector2, linePoint1: Vector2, linePoint2: Vector2): Vector2 {
     const p1ToP = point.difference(linePoint1);
     const line = linePoint2.difference(linePoint1);
@@ -198,10 +282,45 @@ export class Segment extends AbstractShape implements Convex, Wound, Shape, Tran
     return line.multiply(t).add(linePoint1);
   }
 
+  /**
+	 * Returns the point on this {@link Segment} closest to the given point.
+	 * <p>
+	 * This method works in this {@link Segment}'s local space.
+	 * @param point The local space point
+	 * @return The point on this {@link Segment} closest to the given point
+	 * @throws `Error` if the point is null
+	 */
   public getPointOnSegmentClosestToPoint(point: Vector2): Vector2 {
     return Segment.getPointOnSegmentClosestToPoint(point, this.vertices[0], this.vertices[1]);
   }
 
+  /**
+	 * Returns the intersection point of the two lines or null if they are parallel or coincident.
+   * 
+	 * If we let:
+	 * <p style="white-space: pre;"> A = A<sub>p2</sub> - A<sub>p1</sub>
+	 * B = B<sub>p2</sub> - B<sub>p1</sub></p>
+	 * we can create two parametric equations:
+	 * <p style="white-space: pre;"> Q = A<sub>p1</sub> + t<sub>a</sub>A
+	 * Q = B<sub>p1</sub> + t<sub>b</sub>B</p>
+	 * Where Q is the intersection point:
+	 * <p style="white-space: pre;"> A<sub>p1</sub> + t<sub>a</sub>A = B<sub>p1</sub> + t<sub>b</sub>B</p>
+	 * We can solve for t<sub>b</sub> by applying the cross product with A on both sides:
+	 * <p style="white-space: pre;"> (A<sub>p1</sub> + t<sub>a</sub>A) x A = (B<sub>p1</sub> + t<sub>b</sub>B) x A
+	 * A<sub>p1</sub> x A = B<sub>p1</sub> x A + t<sub>b</sub>B x A
+	 * (A<sub>p1</sub> - B<sub>p1</sub>) x A = t<sub>b</sub>B x A
+	 * t<sub>b</sub> = ((A<sub>p1</sub> - B<sub>p1</sub>) x A) / (B x A)</p>
+	 * If B x A == 0 then the lines are parallel.  If both the top and bottom are zero 
+	 * then the lines are coincident.
+   * 
+	 * If the lines are parallel or coincident, null is returned.
+	 * @param ap1 The first point of the first line
+	 * @param ap2 The second point of the first line
+	 * @param bp1 The first point of the second line
+	 * @param bp2 The second point of the second line
+	 * @return Vector2 the intersection point; null if the lines are parallel or coincident
+   * @throws `Error` if any point is null
+	 */
   public static getLineIntersection(ap1: Vector2, ap2: Vector2, bp1: Vector2, bp2: Vector2): Vector2 {
     const A = ap1.to(ap2);
     const B = bp1.to(bp2);
@@ -220,10 +339,53 @@ export class Segment extends AbstractShape implements Convex, Wound, Shape, Tran
     return B.product(tb).add(bp1);
   }
 
+	/**
+	 * Returns the line intersection of the given {@link Segment} and this {@link Segment}.
+   * 
+	 * This method treats this segment and the given segment as defining <b>lines</b> rather than segments.
+	 * 
+	 * This method assumes that both this and the given segment are in the same space (either
+	 * local or world space).
+	 * 
+	 * If the lines are parallel or coincident, null is returned.
+	 * @param segment The other segment
+	 * @return The line intersection point; null if the lines are parallel or coincident
+	 * @throws `Error` if the segment is null
+	 */
   public getLineIntersection(segment: Segment): Vector2 {
     return Segment.getLineIntersection(this.vertices[0], this.vertices[1], segment.vertices[0], segment.vertices[1]);
   }
 
+  /**
+	 * Returns the intersection point of the two line segments or null if they are parallel, coincident
+	 * or don't intersect.
+	 * 
+	 * If we let:
+	 * <p style="white-space: pre;"> A = A<sub>p2</sub> - A<sub>p1</sub>
+	 * B = B<sub>p2</sub> - B<sub>p1</sub></p>
+	 * we can create two parametric equations:
+	 * <p style="white-space: pre;"> Q = A<sub>p1</sub> + t<sub>a</sub>A
+	 * Q = B<sub>p1</sub> + t<sub>b</sub>B</p>
+	 * Where Q is the intersection point:
+	 * <p style="white-space: pre;"> A<sub>p1</sub> + t<sub>a</sub>A = B<sub>p1</sub> + t<sub>b</sub>B</p>
+	 * We can solve for t<sub>b</sub> by applying the cross product with A on both sides:
+	 * <p style="white-space: pre;"> (A<sub>p1</sub> + t<sub>a</sub>A) x A = (B<sub>p1</sub> + t<sub>b</sub>B) x A
+	 * A<sub>p1</sub> x A = B<sub>p1</sub> x A + t<sub>b</sub>B x A
+	 * (A<sub>p1</sub> - B<sub>p1</sub>) x A = t<sub>b</sub>B x A
+	 * t<sub>b</sub> = ((A<sub>p1</sub> - B<sub>p1</sub>) x A) / (B x A)</p>
+	 * If B x A == 0 then the segments are parallel.  If the top == 0 then they don't intersect.  If both the
+	 * top and bottom are zero then the segments are coincident.
+	 * 
+	 * If t<sub>b</sub> or t<sub>a</sub> less than zero or greater than 1 then the segments do not intersect.
+	 * 
+	 * If the segments do not intersect, are parallel, or are coincident, null is returned.
+	 * @param ap1 The first point of the first line segment
+	 * @param ap2 The second point of the first line segment
+	 * @param bp1 The first point of the second line segment
+	 * @param bp2 The second point of the second line segment
+	 * @return Vector2 the intersection point; null if the line segments don't intersect, are parallel, or are coincident
+   * @throws `Error` if any point is null
+	 */
   public static getSegmentIntersection(ap1: Vector2, ap2: Vector2, bp1: Vector2, bp2: Vector2, inclusive?: boolean): Vector2 {
     if (inclusive == null) {
       inclusive = true;
@@ -260,6 +422,21 @@ export class Segment extends AbstractShape implements Convex, Wound, Shape, Tran
     return ip;
   }
 
+	/**
+	 * Returns the intersection point of the two line segments or null if they are parallel, coincident
+	 * or don't intersect.
+	 * 
+	 * In the scenario where two segments intersect at an end point, the behavior is determined by the inclusive
+	 * parameter.  When true, this method will return the intersection point - the end point.  When false, this 
+	 * method will return null (indicating no intersection.
+	 * @param ap1 The first point of the first line segment
+	 * @param ap2 The second point of the first line segment
+	 * @param bp1 The first point of the second line segment
+	 * @param bp2 The second point of the second line segment
+	 * @param inclusive see method documentation for more detail
+	 * @return Vector2 the intersection point; null if the line segments don't intersect, are parallel, or are coincident
+   * @throws `Error` if any point is null
+	 */
   public getSegmentIntersection(segment: Segment): Vector2 {
     return Segment.getSegmentIntersection(this.vertices[0], this.vertices[1], segment.vertices[0], segment.vertices[1], true);
   }
@@ -392,6 +569,10 @@ export class Segment extends AbstractShape implements Convex, Wound, Shape, Tran
     }
   }
 
+  /**
+	 * Returns a normalized edge vector for this segment pointing from the first vertex to the second.
+   * @returns The edge vector
+   */
   public getEdgeVector(): Vector2 {
     const edge = this.vertices[0].to(this.vertices[1]);
     edge.normalize();

@@ -14,15 +14,45 @@ import { Transform } from "./Transform";
 import { Transformable } from "./Transformable";
 import { Vector2 } from "./Vector2";
 
-
+/**
+ * Implementation of a Slice {@link Convex} {@link Shape}.
+ * 
+ * A slice is a piece of a {@link Circle}.
+ */
 export class Slice extends AbstractShape implements Convex, Shape, Transformable, DataContainer {
+  /**
+   * Half the angle of the {@link Slice} in radians.
+   */
   alpha: number;
+  /**
+   * Cosine of alpha.
+   */
   cosAlpha: number;
+  /**
+   * The radius of the {@link Circle} that this slice is a part of.
+   */
   sliceRadius: number;
+  /**
+   * The vertices of the {@link Slice}.
+   */
   vertices: Vector2[];
+  /**
+   * The normals of the {@link Slice}.
+   */
   normals: Vector2[];
+  /**
+   * The local rotation of the {@link Slice}.
+   */
   rotation: Rotation;
 
+  /**
+   * Full constructor.
+   * @param radius The radius of the {@link Circle} that this slice is a part of.
+   * @param theta The angle of the {@link Slice} in radians; must be greater than zero and less than or equal to &pi;
+   * @throws `Error` radius is less than or equal to zero
+   * @throws `Error` theta is less than or equal to zero
+   * @throws `Error` theta is greater than &pi;
+   */
   constructor(radius: number, theta: number) {
     Slice.validate(radius, theta);
     const center = new Vector2(2.0 * radius * Math.sin(theta * 0.5) / (1.5 * theta), 0);
@@ -268,22 +298,44 @@ export class Slice extends AbstractShape implements Convex, Shape, Transformable
     }
   }
 
+  /**
+   * Returns the rotation about the local center in radians in the range [-&pi;, &pi;].
+   * @returns The rotation angle in radians
+   */
   public getRotationAngle(): number {
     return this.rotation.toRadians();
   }
 
+  /**
+   * Returns the {@link Rotation} object that represents the local center.
+   * @returns The {@link Rotation} object that represents the local center
+   */
   public getRotation(): Rotation {
     return this.rotation.copy();
   }
 
+  /**
+   * Returns the angle of the {@link Slice} in radians.
+   * @returns The angle of the {@link Slice} in radians
+   */
   public getTheta(): number {
     return this.alpha * 2;
   }
 
+  /**
+   * Returns the radius of the {@link Slice}.
+   * @returns The radius of the {@link Slice}
+   */
   public getSliceRadius(): number {
     return this.sliceRadius;
   }
 
+  /**
+   * Returns the center of the {@link Slice}.
+   * 
+   * This is the tip of the pie shape.
+   * @returns The center of the {@link Slice}
+   */
   public getCircleCenter(): Vector2 {
     return this.vertices[0];
   }

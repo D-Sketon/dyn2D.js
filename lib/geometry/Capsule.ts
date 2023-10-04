@@ -14,16 +14,57 @@ import { Shape } from "./Shape";
 import { Transform } from "./Transform";
 import { Transformable } from "./Transformable";
 import { Vector2 } from "./Vector2";
-export class Capsule extends AbstractShape implements Convex, Shape, Transformable, DataContainer {
 
+/**
+ * Implementation of a Capsule {@link Convex} {@link Shape}. 
+ * 
+ * A capsule can be described as a rectangle with two half circle caps on both ends. A capsule is created
+ * by specifying the bounding rectangle of the entire {@link Shape}.
+ * 
+ * If the height is larger than the width the caps will be on the top and bottom of the shape. Otherwise
+ * the caps are on the left and right ends of the shape.
+ * 
+ * A capsule's width and height must be larger than zero and cannot be equal.  A {@link Circle} should be used
+ * instead of an equal width/height capsule for both performance and stability.
+ */
+export class Capsule extends AbstractShape implements Convex, Shape, Transformable, DataContainer {
+  /** 
+   * The Capsule shape has two edge features which could be returned from the {@link Capsule.getFarthestFeature}
+   * method. Under normal floating point conditions the edges will never be selected as the farthest features. Due to this,
+   * stacking of capsule shapes is very unstable (or any resting contact that involves the edge). We introduce this factor
+   * (% of projected normal) to help select the edge in cases where the collision normal is nearly parallel to the edge normal.
+   */
   static readonly EDGE_FEATURE_SELECTION_CRITERIA = 0.98;
+  /**
+   * Because we are selecting an edge even when the farthest feature should be a vertex, when the edges are clipped
+   * against each other (in the ClippingManifoldSolver) they will not overlap. Due to this, we introduce an expansion
+   * value (% of the width) that expands the edge feature so that in these cases a collision manifold is still generated.
+   */
   static readonly EDGE_FEATURE_EXPANSION_FACTOR = 0.1;
 
+  /**
+   * The bounding rectangle width
+   */
   length: number;
+  /**
+   * The end cap radius
+   */
   capRadius: number;
+  /**
+   * The foci points of the capsule
+   */
   foci: Vector2[];
+  /**
+   * The local x-axis of the capsule
+   */
   localXAxis: Vector2;
 
+  /**
+   * Full constructor.
+   * @param width The bounding rectangle width
+   * @param height The bounding rectangle height
+   * @throws `Error` if width or height are less than or equal to zero or if the width and height are near equal
+   */
   constructor(width: number, height: number) {
     Capsule.validate(width, height);
     super(Math.max(width, height) * 0.5);
@@ -234,18 +275,34 @@ export class Capsule extends AbstractShape implements Convex, Shape, Transformab
     }
   }
 
+  /**
+   * Returns the rotation about the local center in radians in the range [-&pi;, &pi;].
+   * @returns The rotation angle in radians
+   */
   public getRotationAngle(): number {
     return Math.atan2(this.localXAxis.y, this.localXAxis.x);
   }
 
+  /**
+   * Returns the {@link Rotation} object that represents the local center.
+   * @returns The {@link Rotation} object that represents the local center
+   */
   public getRotation(): Rotation {
     return new Rotation(this.localXAxis.x, this.localXAxis.y);
   }
 
+  /**
+   * Returns the length of the capsule.
+   * @returns The length of the capsule
+   */
   public getLength(): number {
     return this.length;
   }
 
+  /**
+   * Returns the radius of the capsule end caps.
+   * @returns The radius of the capsule end caps
+   */
   public getCapRadius(): number {
     return this.capRadius;
   }

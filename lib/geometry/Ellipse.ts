@@ -11,17 +11,46 @@ import { Shape } from "./Shape";
 import { Transform } from "./Transform";
 import { Transformable } from "./Transformable";
 import { Vector2 } from "./Vector2";
+
+/**
+ * Implementation of an Ellipse {@link Convex} {@link Shape}.
+ * 
+ * An ellipse must have a width and height greater than zero.
+ */
 export class Ellipse extends AbstractShape implements Convex, Shape, Transformable, DataContainer {
 
+  /**
+   * The inverse of the golden ratio
+   */
   static readonly INV_GOLDEN_RATIO = 1.0 / ((Math.sqrt(5.0) + 1.0) * 0.5);
 
+  /**
+   * The maximum number of iterations to perform when finding the farthest point
+   */
   static readonly FARTHEST_POINT_MAX_ITERATIONS = 50;
+  /**
+   * The desired accuracy for the farthest point
+   */
   static readonly FARTHEST_POINT_EPSILON = 1e-8;
 
+  /**
+   * The half-width of the {@link Ellipse}
+   */
   halfWidth: number;
+  /**
+   * The half-height of the {@link Ellipse}
+   */
   halfHeight: number;
+  /**
+   * The local rotation of the {@link Ellipse}
+   */
   rotation: Rotation;
 
+  /**
+   * Full constructor.
+   * @param width The width of the {@link Ellipse}.
+   * @param height The height of the {@link Ellipse}.
+   */
   constructor(width: number, height: number) {
     Ellipse.validate(width, height);
     super(Math.max(width, height) * 0.5);
@@ -40,6 +69,20 @@ export class Ellipse extends AbstractShape implements Convex, Shape, Transformab
     return true;
   }
 
+  /**
+	 * Returns the point on this ellipse farthest from the given point.
+   * 
+   * This method assumes that this ellipse is centered on the origin and 
+	 * has it's semi-major axis aligned with the x-axis and its semi-minor 
+	 * axis aligned with the y-axis.
+   * 
+   * This method performs a Golden Section Search to find the point of
+	 * maximum distance from the given point.
+   * @param a The half width of the {@link Ellipse}
+   * @param b The half height of the {@link Ellipse}
+   * @param point The query point
+   * @returns The point on this ellipse farthest from the given point.
+   */
   public static getFarthestPointOnEllipse(a: number, b: number, point: Vector2): Vector2 {
     let px = point.x;
     let py = point.y;
@@ -93,6 +136,20 @@ export class Ellipse extends AbstractShape implements Convex, Shape, Transformab
     return p;
   }
 
+  /**
+	 * Performs a golden section search of the ellipse bounded between the interval [xmin, xmax] for the farthest
+	 * point from the given point.
+   * 
+	 * This method assumes that this ellipse is centered on the origin and 
+	 * has it's semi-major axis aligned with the x-axis and its semi-minor 
+	 * axis aligned with the y-axis.
+	 * @param xmin The minimum x value
+	 * @param xmax The maximum x value
+	 * @param a The half width of the {@link Ellipse}
+	 * @param b The half height of the {@link Ellipse}
+	 * @param point the query point
+	 * @return The point on this ellipse farthest from the given point.
+	 */
   public static getFarthestPointOnBoundedEllipse(xmin: number, xmax: number, a: number, b: number, point: Vector2): Vector2 {
     let px = point.x;
     let py = point.y;
@@ -132,6 +189,15 @@ export class Ellipse extends AbstractShape implements Convex, Shape, Transformab
     return p;
   }
 
+  /**
+	 * Returns the distance from the ellipse at the given x to the given point q.
+	 * @param a2 The ellipse semi-major axis squared (a * a)
+	 * @param ba The ellipse semi-minor axis divided by the semi-major axis (b / a)
+	 * @param x The x of the point on the ellipse
+	 * @param q The query point
+	 * @param p output; the point on the ellipse
+	 * @return The distance from the ellipse at the given x to the given point q.
+	 */
   private static getSquaredDistance(a2: number, ba: number, x: number, q: Vector2, p: Vector2): number {
     let a2x2 = a2 - (x * x);
     if (a2x2 < 0) {
@@ -276,26 +342,50 @@ export class Ellipse extends AbstractShape implements Convex, Shape, Transformab
     }
   }
 
+  /**
+   * Returns the rotation about the local center in radians in the range [-&pi;, &pi;].
+   * @returns The rotation angle in radians
+   */
   public getRotationAngle(): number {
     return this.rotation.toRadians();
   }
 
+  /**
+   * Returns the {@link Rotation} object that represents the local center.
+   * @returns The {@link Rotation} object that represents the local center
+   */
   public getRotation(): Rotation {
     return this.rotation.copy();
   }
 
+  /**
+   * Returns the width of the {@link Ellipse}.
+   * @returns The width of the {@link Ellipse}
+   */
   public getWidth(): number {
     return this.halfWidth * 2;
   }
 
+  /**
+   * Returns the height of the {@link Ellipse}.
+   * @returns The height of the {@link Ellipse}
+   */
   public getHeight(): number {
     return this.halfHeight * 2;
   }
 
+  /**
+   * Returns the half width of the {@link Ellipse}.
+   * @returns The half width of the {@link Ellipse}
+   */
   public getHalfWidth(): number {
     return this.halfWidth;
   }
 
+  /**
+   * Returns the half height of the {@link Ellipse}.
+   * @returns The half height of the {@link Ellipse}
+   */
   public getHalfHeight(): number {
     return this.halfHeight;
   }
