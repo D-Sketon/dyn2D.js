@@ -35,7 +35,7 @@ export class AABB implements Translatable, Copyable<AABB> {
    * Full constructor.
    * @param center The center of the circle.
    * @param radius The radius of a circle fitting inside the {@link AABB}.
-   * @throws `RangeError`` if the radius is negative.
+   * @throws `RangeError` if the radius is negative.
    */
   constructor(center: Vector2 | null, radius: number);
   /**
