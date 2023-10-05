@@ -1,3 +1,6 @@
+/**
+ * Enumeration for special {@link Mass} types.
+ */
 export enum MassType {
   /** Indicates a normal mass */
   NORMAL,

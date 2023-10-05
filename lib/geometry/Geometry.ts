@@ -15,8 +15,11 @@ import { Triangle } from "./Triangle";
 import { Vector2 } from "./Vector2";
 import { Wound } from "./Wound";
 
+/** 2 * PI constant */
 export const TWO_PI = Math.PI * 2;
+/** The value of 1/3 */
 export const INV_3 = 1 / 3;
+/** The value of the inverse of the square root of 3; 1/sqrt(3) */
 export const INV_SQRT_3 = 1 / Math.sqrt(3);
 
 function _getWinding(points: Vector2[]): number {
@@ -41,6 +44,13 @@ function _getWinding(points: Vector2[]): number {
   return area;
 }
 
+/**
+ * Returns the winding, Clockwise or Counter-Clockwise, for the given list of points of a polygon.
+ * @param points The {@link Polygon} points
+ * @returns Negative for Clockwise winding; positive for Counter-Clockwise winding
+ * @throws `TypeError` if points is null or an element of points is null
+ * @throws `RangeError` if points.length < 2
+ */
 function getWinding(points: Vector2[]): number;
 function getWinding(...points: Vector2[]): number;
 function getWinding(...args: any[]): number {
@@ -60,6 +70,11 @@ function _reverseWinding(points: Vector2[]): void {
   points.reverse();
 }
 
+/**
+ * Reverses the order of the polygon points within the given array.
+ * @param points The {@link Polygon} points
+ * @throws `TypeError` if points is null
+ */
 function reverseWinding(points: Vector2[]): void;
 function reverseWinding(...points: Vector2[]): void;
 function reverseWinding(...args: any[]): void {
@@ -94,6 +109,13 @@ function _getAverageCenter(points: Vector2[]): Vector2 {
   return ac.divide(len);
 }
 
+/**
+ * Returns the centroid of the given points by performing an average.
+ * @param points The list of points
+ * @returns The centroid
+ * @throws `TypeError` if points is null or an element of points is null
+ * @throws `RangeError` if points.length === 0
+ */
 function getAverageCenter(points: Vector2[]): Vector2;
 function getAverageCenter(...points: Vector2[]): Vector2;
 function getAverageCenter(...args: any[]): Vector2 {
@@ -126,6 +148,13 @@ function _getAreaWeightedCenter(points: Vector2[]): Vector2 {
   return center;
 }
 
+/**
+ * Returns the area weighted centroid for the given points.
+ * @param points The {@link Polygon} points
+ * @returns The area weighted centroid
+ * @throws `TypeError` if points is null or an element of points is null
+ * @throws `RangeError` if points.length === 0
+ */
 function getAreaWeightedCenter(points: Vector2[]): Vector2;
 function getAreaWeightedCenter(...points: Vector2[]): Vector2;
 function getAreaWeightedCenter(...args: any[]): Vector2 {
@@ -138,6 +167,11 @@ function getAreaWeightedCenter(...args: any[]): Vector2 {
   return _getAreaWeightedCenter(points);
 }
 
+/**
+ * Returns the maximum radius of the given vertices rotated about the origin.
+ * @param vertices The {@link Polygon} points
+ * @returns The maximum radius
+ */
 function getRotationRadius(vertices: Vector2[]): number;
 function getRotationRadius(center: Vector2, vertices: Vector2[]): number;
 function getRotationRadius(center: Vector2 | Vector2[], vertices?: Vector2[]): number {
@@ -163,6 +197,12 @@ function getRotationRadius(center: Vector2 | Vector2[], vertices?: Vector2[]): n
   return Math.sqrt(r2);
 }
 
+/**
+ *  Returns an array of normalized vectors representing the normals of all the edges given the vertices.
+ * @param vertices The vertices
+ * @returns The normals
+ * @throws `TypeError` if an element of vertices is null
+ */
 function getCounterClockwiseEdgeNormals(vertices: Vector2[]): Vector2[];
 function getCounterClockwiseEdgeNormals(...vertices: Vector2[]): Vector2[];
 function getCounterClockwiseEdgeNormals(...vertices: any[]): Vector2[] {
@@ -173,16 +213,16 @@ function getCounterClockwiseEdgeNormals(...vertices: any[]): Vector2[] {
   const len = vertices.length;
   if (len === 0) return null;
   if (len === 1 && vertices[0] == null) return null;
-  
+
   const normals = new Array<Vector2>(len);
   for (let i = 0; i < len; i++) {
     const v1 = vertices[i];
     if (v1 == null) {
-      throw new Error("Geometry.getCounterClockwiseEdgeNormals: vertices[" + i + "]");
+      throw new TypeError("Geometry.getCounterClockwiseEdgeNormals: vertices[" + i + "]");
     };
     const v2 = vertices[(i + 1) % len];
     if (v2 == null) {
-      throw new Error("Geometry.getCounterClockwiseEdgeNormals: vertices[" + ((i + 1) % len) + "]");
+      throw new TypeError("Geometry.getCounterClockwiseEdgeNormals: vertices[" + ((i + 1) % len) + "]");
     };
     const n = v1.to(v2).left();
     n.normalize();
@@ -191,10 +231,23 @@ function getCounterClockwiseEdgeNormals(...vertices: any[]): Vector2[] {
   return normals;
 }
 
+/**
+ * Returns a new {@link Circle} with the given radius centered on the origin.
+ * @param radius The radius in meters
+ * @returns The {@link Circle}
+ * @throws `RangeError` if radius <= 0
+ */
 function createCircle(radius: number): Circle {
   return new Circle(radius);
 }
 
+/**
+ * Returns a new {@link Polygon} with the given vertices.
+ * @param vertices The vertices
+ * @returns The {@link Polygon}
+ * @throws `TypeError` if an element of vertices is null
+ * @throws `RangeError` if vertices.length < 3
+ */
 function createPolygon(...vertices: Vector2[]): Polygon {
   let len = vertices.length;
   const verts = new Array<Vector2>(len);
@@ -209,6 +262,13 @@ function createPolygon(...vertices: Vector2[]): Polygon {
   return new Polygon(...verts);
 }
 
+/**
+ * Returns a new {@link Polygon}, using the given vertices, centered at the origin.
+ * @param vertices The vertices
+ * @returns The {@link Polygon}
+ * @throws `TypeError` if an element of vertices is null
+ * @throws `RangeError` if vertices.length < 3
+ */
 function createPolygonAtOrigin(...vertices: Vector2[]): Polygon {
   const polygon = createPolygon(...vertices);
   const center = polygon.getCenter();
@@ -216,35 +276,81 @@ function createPolygonAtOrigin(...vertices: Vector2[]): Polygon {
   return polygon;
 }
 
+/**
+ * Returns a new {@link Polygon} with count number of points, where the
+ * points are evenly distributed around the unit circle.  The resulting {@link Polygon}
+ * will be centered on the origin.
+ * @param count The number of vertices
+ * @param radius The radius from the center to each vertex in meters
+ * @param theta The starting angle in radians
+ * @returns The {@link Polygon}
+ * @throws `RangeError` if count < 3
+ * @throws `RangeError` if radius <= 0
+ */
 function createUnitCirclePolygon(count: number, radius: number, theta?: number): Polygon {
   if (theta === void 0) theta = 0.0;
   return createPolygonalCircle(count, radius, theta);
 }
 
+/**
+ * Creates a square (equal height and width {@link Rectangle}) with the given size 
+ * centered at the origin.
+ * @param size The size of the square in meters
+ * @returns The {@link Rectangle}
+ * @throws `RangeError` if size <= 0
+ */
 function createSquare(size: number): Rectangle {
   if (size <= 0) {
-    throw new Error('Geometry.createSquare: size must be positive.');
+    throw new RangeError('Geometry.createSquare: size must be positive.');
   }
   return new Rectangle(size, size);
 }
 
+/**
+ * Creates a new {@link Rectangle} with the given width and height centered at the origin.
+ * @param width The width of the rectangle in meters
+ * @param height The height of the rectangle in meters
+ * @returns The {@link Rectangle}
+ * @throws `RangeError` if width <= 0
+ * @throws `RangeError` if height <= 0
+ */
 function createRectangle(width: number, height: number): Rectangle {
   return new Rectangle(width, height);
 }
 
+/**
+ * Creates a new {@link Triangle} with the given points centered at the origin.
+ * @param p1 The first point
+ * @param p2 The second point
+ * @param p3 The third point
+ * @returns The {@link Triangle}
+ * @throws `TypeError` if p1 is null
+ * @throws `TypeError` if p2 is null
+ * @throws `TypeError` if p3 is null
+ */
 function createTriangle(p1: Vector2, p2: Vector2, p3: Vector2): Triangle {
   if (p1 == null) {
-    throw new Error('Geometry.createTriangle: p1 is null.');
+    throw new TypeError('Geometry.createTriangle: p1 is null.');
   }
   if (p2 == null) {
-    throw new Error('Geometry.createTriangle: p2 is null.');
+    throw new TypeError('Geometry.createTriangle: p2 is null.');
   }
   if (p3 == null) {
-    throw new Error('Geometry.createTriangle: p3 is null.');
+    throw new TypeError('Geometry.createTriangle: p3 is null.');
   }
   return new Triangle(p1.copy(), p2.copy(), p3.copy());
 }
 
+/**
+ * Creates a right angle {@link Triangle} with the center at the origin.
+ * @param p1 The first point
+ * @param p2 The second point
+ * @param p3 The third point
+ * @returns The {@link Triangle}
+ * @throws `TypeError` if p1 is null
+ * @throws `TypeError` if p2 is null
+ * @throws `TypeError` if p3 is null
+ */
 function createTriangleAtOrigin(p1: Vector2, p2: Vector2, p3: Vector2): Triangle {
   const triangle = createTriangle(p1, p2, p3);
   const center = triangle.getCenter();
@@ -252,13 +358,22 @@ function createTriangleAtOrigin(p1: Vector2, p2: Vector2, p3: Vector2): Triangle
   return triangle;
 }
 
+/**
+ * Creates a right angle {@link Triangle} with the center at the origin.
+ * @param width The width of the base in meters
+ * @param height The height in meters
+ * @param mirror true if the triangle should be mirrored along the y-axis
+ * @returns The {@link Triangle}
+ * @throws `RangeError` if width <= 0
+ * @throws `RangeError` if height <= 0
+ */
 function createRightTriangle(width: number, height: number, mirror?: boolean): Triangle {
   if (mirror === void 0) mirror = false;
   if (width <= 0) {
-    throw new Error('Geometry.createRightTriangle: width must be positive.');
+    throw new RangeError('Geometry.createRightTriangle: width must be positive.');
   }
   if (height <= 0) {
-    throw new Error('Geometry.createRightTriangle: height must be positive.');
+    throw new RangeError('Geometry.createRightTriangle: height must be positive.');
   }
   const top = new Vector2(0.0, height);
   const left = new Vector2(0.0, 0.0);
@@ -274,20 +389,34 @@ function createRightTriangle(width: number, height: number, mirror?: boolean): T
   return triangle;
 }
 
+/**
+ * Creates an equilateral {@link Triangle} with the center at the origin.
+ * @param height The height of the {@link Triangle} in meters
+ * @returns The {@link Triangle}
+ * @throws `RangeError` if height <= 0
+ */
 function createEquilateralTriangle(height: number): Triangle {
   if (height <= 0) {
-    throw new Error('Geometry.createEquilateralTriangle: height must be positive.');
+    throw new RangeError('Geometry.createEquilateralTriangle: height must be positive.');
   }
   const a = 2.0 * height * INV_SQRT_3;
   return createIsoscelesTriangle(a, height);
 }
 
+/**
+ * Creates an isosceles {@link Triangle} with the center at the origin.
+ * @param width The width of the base in meters
+ * @param height The height in meters
+ * @returns The {@link Triangle}
+ * @throws `RangeError` if width <= 0
+ * @throws `RangeError` if height <= 0
+ */
 function createIsoscelesTriangle(width: number, height: number): Triangle {
   if (width <= 0) {
-    throw new Error('Geometry.createIsoscelesTriangle: width must be positive.');
+    throw new RangeError('Geometry.createIsoscelesTriangle: width must be positive.');
   }
   if (height <= 0) {
-    throw new Error('Geometry.createIsoscelesTriangle: height must be positive.');
+    throw new RangeError('Geometry.createIsoscelesTriangle: height must be positive.');
   }
   const top = new Vector2(0.0, height);
   const left = new Vector2(-width * 0.5, 0.0);
@@ -298,19 +427,43 @@ function createIsoscelesTriangle(width: number, height: number): Triangle {
   return triangle;
 }
 
+/**
+ * Creates a new {@link Segment} from the origin to the given end point
+ * @param end The end point
+ * @returns The {@link Segment}
+ * @throws `TypeError` if end is null
+ */
 function createSegment(end: Vector2): Segment;
+/**
+ * Creates a new {@link Segment} with the given points.
+ * @param p1 The start point
+ * @param p2 The end point
+ * @returns The {@link Segment}
+ * @throws `TypeError` if p1 is null
+ * @throws `TypeError` if p2 is null
+ */
 function createSegment(p1: Vector2, p2: Vector2): Segment;
 function createSegment(p1: Vector2, p2?: Vector2): Segment {
   if (p2 === void 0) return createSegment(new Vector2(), p1);
   if (p1 == null) {
-    throw new Error('Geometry.createSegment: p1 is null.');
+    throw new TypeError('Geometry.createSegment: p1 is null.');
   }
   if (p2 == null) {
-    throw new Error('Geometry.createSegment: p2 is null.');
+    throw new TypeError('Geometry.createSegment: p2 is null.');
   }
   return new Segment(p1.copy(), p2.copy());
 }
 
+/**
+ * Creates a new {@link Segment} with the given points.
+ * 
+ * This method translates the {@link Segment} vertices so that the center is at the origin.
+ * @param p1 The start point
+ * @param p2 The end point
+ * @returns The {@link Segment}
+ * @throws `TypeError` if p1 is null
+ * @throws `TypeError` if p2 is null
+ */
 function createSegmentAtOrigin(p1: Vector2, p2: Vector2): Segment {
   const segment = createSegment(p1, p2);
   const center = segment.getCenter();
@@ -318,46 +471,115 @@ function createSegmentAtOrigin(p1: Vector2, p2: Vector2): Segment {
   return segment;
 }
 
+/**
+ * Creates a new {@link Segment} with the given length with the center
+ * at the origin.
+ * @param length The length of the segment in meters
+ * @returns The {@link Segment}
+ * @throws `RangeError` if length <= 0
+ */
 function createHorizontalSegment(length: number): Segment {
   if (length <= 0) {
-    throw new Error('Geometry.createHorizontalSegment: length must be positive.');
+    throw new RangeError('Geometry.createHorizontalSegment: length must be positive.');
   }
   const start = new Vector2(-length * 0.5, 0.0);
   const end = new Vector2(length * 0.5, 0.0);
   return new Segment(start, end);
 }
 
+/**
+ * Creates a new {@link Segment} with the given length with the center
+ * at the origin.
+ * @param length The length of the segment in meters
+ * @returns The {@link Segment}
+ * @throws `RangeError` if length <= 0
+ */
 function createVerticalSegment(length: number): Segment {
   if (length <= 0) {
-    throw new Error('Geometry.createHorizontalSegment: length must be positive.');
+    throw new RangeError('Geometry.createHorizontalSegment: length must be positive.');
   }
   const start = new Vector2(0.0, -length * 0.5);
   const end = new Vector2(0.0, length * 0.5);
   return new Segment(start, end);
 }
 
+/**
+ * Creates a new {@link Capsule} bounded by the given rectangle width and height.
+ * 
+ * The capsule will be axis-aligned and centered on the origin with the caps on the
+ * ends of the largest dimension.
+ * @param width The bounding rectangle width
+ * @param height The bounding rectangle height
+ * @returns The {@link Capsule}
+ * @throws `RangeError` if width <= 0
+ * @throws `RangeError` if height <= 0
+ */
 function createCapsule(width: number, height: number): Capsule {
   return new Capsule(width, height);
 }
 
+/**
+ * Creates a new {@link Slice} with the given circle radius and arc length theta.
+ * @param radius The circle radius
+ * @param theta The total arc length in radians
+ * @returns The {@link Slice}
+ * @throws `RangeError` if radius <= 0
+ * @throws `RangeError` if theta <= 0
+ * @throws `RangeError` if theta > 2 * PI
+ */
 function createSlice(radius: number, theta: number): Slice {
   return new Slice(radius, theta);
 }
 
+/**
+ * Creates a new {@link Slice} with the given circle radius and arc length theta.
+ * 
+ * The slice will be positioned with the <i>centroid</i> at the origin.
+ * @param radius The circle radius
+ * @param theta The total arc length in radians
+ * @returns The {@link Slice}
+ * @throws `RangeError` if radius <= 0
+ * @throws `RangeError` if theta <= 0
+ * @throws `RangeError` if theta > 2 * PI
+ */
 function createSliceAtOrigin(radius: number, theta: number): Slice {
   const slice = new Slice(radius, theta);
   slice.translate(-slice.center.x, -slice.center.y);
   return slice;
 }
 
+/**
+ * Creates a new {@link Ellipse} bounded by the given rectangle width and height.
+ * @param width The bounding rectangle width
+ * @param height The bounding rectangle height
+ * @returns The {@link Ellipse}
+ * @throws `RangeError` if width <= 0
+ * @throws `RangeError` if height <= 0
+ */
 function createEllipse(width: number, height: number): Ellipse {
   return new Ellipse(width, height);
 }
 
+/**
+ * Creates a new {@link HalfEllipse} bounded by the given rectangle width and height.
+ * @param width The bounding rectangle width
+ * @param height The bounding rectangle height
+ * @returns The {@link HalfEllipse}
+ * @throws `RangeError` if width <= 0
+ * @throws `RangeError` if height <= 0
+ */
 function createHalfEllipse(width: number, height: number): HalfEllipse {
   return new HalfEllipse(width, height);
 }
 
+/**
+ * Creates a new {@link HalfEllipse} bounded by the given rectangle width and height.
+ * @param width The bounding rectangle width
+ * @param height The bounding rectangle height
+ * @returns The {@link HalfEllipse}
+ * @throws `RangeError` if width <= 0
+ * @throws `RangeError` if height <= 0
+ */
 function createHalfEllipseAtOrigin(width: number, height: number): HalfEllipse {
   const half = new HalfEllipse(width, height);
   const c = half.getCenter();
@@ -365,13 +587,23 @@ function createHalfEllipseAtOrigin(width: number, height: number): HalfEllipse {
   return half;
 }
 
+/**
+ * Creates a new {@link Polygon} in the shape of a circle with count number of vertices centered
+ * on the origin.
+ * @param count The number of vertices
+ * @param radius The radius of the circle
+ * @param theta The radial offset for the points in radians
+ * @returns The {@link Polygon}
+ * @throws `RangeError` if count < 3
+ * @throws `RangeError` if radius <= 0
+ */
 function createPolygonalCircle(count: number, radius: number, theta?: number): Polygon {
   if (theta === void 0) theta = 0.0;
   if (count < 3) {
-    throw new Error('Geometry.createPolygonalCircle: count must be greater than or equal to 3.');
+    throw new RangeError('Geometry.createPolygonalCircle: count must be greater than or equal to 3.');
   }
   if (radius <= 0) {
-    throw new Error('Geometry.createPolygonalCircle: radius must be positive.');
+    throw new RangeError('Geometry.createPolygonalCircle: radius must be positive.');
   }
   const pin = TWO_PI / count;
   const vertices = new Array<Vector2>(count);
@@ -397,15 +629,28 @@ function createPolygonalCircle(count: number, radius: number, theta?: number): P
   return new Polygon(...vertices);
 }
 
+/**
+ * Creates a new {@link Polygon} in the shape of a {@link Slice} with count number of vertices with the
+ * circle center centered on the origin.
+ * 
+ * This method returns a polygon with count + 3 vertices.
+ * @param count The number of vertices
+ * @param radius The radius of the circle
+ * @param theta The arc length of the slice in radians
+ * @returns The {@link Polygon}
+ * @throws `RangeError` if count < 1
+ * @throws `RangeError` if radius <= 0
+ * @throws `RangeError` if theta <= 0
+ */
 function createPolygonalSlice(count: number, radius: number, theta: number): Polygon {
   if (count < 1) {
-    throw new Error('Geometry.createPolygonalSlice: count must be greater than or equal to 1.');
+    throw new RangeError('Geometry.createPolygonalSlice: count must be greater than or equal to 1.');
   }
   if (radius <= 0) {
-    throw new Error('Geometry.createPolygonalSlice: radius must be positive.');
+    throw new RangeError('Geometry.createPolygonalSlice: radius must be positive.');
   }
   if (theta <= 0) {
-    throw new Error('Geometry.createPolygonalSlice: theta must be positive.');
+    throw new RangeError('Geometry.createPolygonalSlice: theta must be positive.');
   }
   const pin = theta / (count + 1);
   const vertices = new Array<Vector2>(count + 3);
@@ -431,6 +676,18 @@ function createPolygonalSlice(count: number, radius: number, theta: number): Pol
   return new Polygon(...vertices);
 }
 
+/**
+ * Creates a new {@link Polygon} in the shape of a {@link Slice} with count number of vertices centered on the origin.
+ * 
+ * This method returns a polygon with count + 3 vertices.
+ * @param count The number of vertices
+ * @param radius The radius of the circle
+ * @param theta The arc length of the slice in radians
+ * @returns The {@link Polygon}
+ * @throws `RangeError` if count < 1
+ * @throws `RangeError` if radius <= 0
+ * @throws `RangeError` if theta <= 0
+ */
 function createPolygonalSliceAtOrigin(count: number, radius: number, theta: number): Polygon {
   const polygon = createPolygonalSlice(count, radius, theta);
   const center = polygon.getCenter();
@@ -438,15 +695,26 @@ function createPolygonalSliceAtOrigin(count: number, radius: number, theta: numb
   return polygon;
 }
 
+/**
+ * Creates a new {@link Polygon} in the shape of an ellipse with count number of vertices centered
+ * on the origin.
+ * @param count The number of vertices
+ * @param width The width of the ellipse
+ * @param height The height of the ellipse
+ * @returns The {@link Polygon}
+ * @throws `RangeError` if count < 4
+ * @throws `RangeError` if width <= 0
+ * @throws `RangeError` if height <= 0
+ */
 function createPolygonalEllipse(count: number, width: number, height: number): Polygon {
   if (count < 4) {
-    throw new Error('Geometry.createPolygonalEllipse: count must be greater than or equal to 4.');
+    throw new RangeError('Geometry.createPolygonalEllipse: count must be greater than or equal to 4.');
   }
   if (width <= 0) {
-    throw new Error('Geometry.createPolygonalEllipse: width must be positive.');
+    throw new RangeError('Geometry.createPolygonalEllipse: width must be positive.');
   }
   if (height <= 0) {
-    throw new Error('Geometry.createPolygonalEllipse: height must be positive.');
+    throw new RangeError('Geometry.createPolygonalEllipse: height must be positive.');
   }
   const a = width * 0.5;
   const b = height * 0.5;
@@ -469,15 +737,28 @@ function createPolygonalEllipse(count: number, width: number, height: number): P
   return new Polygon(...vertices);
 }
 
+/**
+ * Creates a new {@link Polygon} in the shape of a half ellipse with count number of vertices with the
+ * base at the origin.
+ * 
+ * Returns a polygon with count + 2 vertices.
+ * @param count The number of vertices
+ * @param width The width of the half ellipse
+ * @param height The height of the half ellipse; should be the total height
+ * @returns The {@link Polygon}
+ * @throws `RangeError` if count < 4
+ * @throws `RangeError` if width <= 0
+ * @throws `RangeError` if height <= 0
+ */
 function createPolygonalHalfEllipse(count: number, width: number, height: number): Polygon {
   if (count < 4) {
-    throw new Error('Geometry.createPolygonalHalfEllipse: count must be greater than or equal to 4.');
+    throw new RangeError('Geometry.createPolygonalHalfEllipse: count must be greater than or equal to 4.');
   }
   if (width <= 0) {
-    throw new Error('Geometry.createPolygonalHalfEllipse: width must be positive.');
+    throw new RangeError('Geometry.createPolygonalHalfEllipse: width must be positive.');
   }
   if (height <= 0) {
-    throw new Error('Geometry.createPolygonalHalfEllipse: height must be positive.');
+    throw new RangeError('Geometry.createPolygonalHalfEllipse: height must be positive.');
   }
   const a = width * 0.5;
   const b = height * 0.5;
@@ -498,6 +779,19 @@ function createPolygonalHalfEllipse(count: number, width: number, height: number
   return new Polygon(...vertices);
 }
 
+/**
+ * Creates a new {@link Polygon} in the shape of a half ellipse with count number of vertices centered
+ * on the origin.
+ * 
+ * Returns a polygon with count + 2 vertices.
+ * @param count The number of vertices
+ * @param width The width of the half ellipse
+ * @param height The height of the half ellipse; should be the total height
+ * @returns The {@link Polygon}
+ * @throws `RangeError` if count < 4
+ * @throws `RangeError` if width <= 0
+ * @throws `RangeError` if height <= 0
+ */
 function createPolygonalHalfEllipseAtOrigin(count: number, width: number, height: number): Polygon {
   const polygon = createPolygonalHalfEllipse(count, width, height);
   const center = polygon.getCenter();
@@ -505,15 +799,28 @@ function createPolygonalHalfEllipseAtOrigin(count: number, width: number, height
   return polygon;
 }
 
+/**
+ * Creates a new {@link Polygon} in the shape of a capsule using count number of vertices on each
+ * cap, centered on the origin.  The caps will be on the ends of the largest dimension.
+ * 
+ * The returned polygon will have 4 + 2 * count number of vertices.
+ * @param count The number of vertices
+ * @param width The bounding rectangle width
+ * @param height The bounding rectangle height
+ * @returns The {@link Polygon}
+ * @throws `RangeError` if count < 1
+ * @throws `RangeError` if width <= 0
+ * @throws `RangeError` if height <= 0
+ */
 function createPolygonalCapsule(count: number, width: number, height: number): Polygon {
   if (count < 1) {
-    throw new Error('Geometry.createPolygonalCapsule: count must be greater than or equal to 1.');
+    throw new RangeError('Geometry.createPolygonalCapsule: count must be greater than or equal to 1.');
   }
   if (width <= 0) {
-    throw new Error('Geometry.createPolygonalCapsule: width must be positive.');
+    throw new RangeError('Geometry.createPolygonalCapsule: width must be positive.');
   }
   if (height <= 0) {
-    throw new Error('Geometry.createPolygonalCapsule: height must be positive.');
+    throw new RangeError('Geometry.createPolygonalCapsule: height must be positive.');
   }
   if (Math.abs(width - height) < Epsilon.E) {
     return createPolygonalCircle(count, width);
@@ -584,6 +891,16 @@ function createPolygonalCapsule(count: number, width: number, height: number): P
   return new Polygon(...vertices);
 }
 
+/**
+ * Returns a new list containing the 'cleansed' version of the given listing of polygon points.
+ * 
+ * This method ensures the polygon has CCW winding, removes colinear vertices, and removes coincident vertices.
+ * 
+ * If the given list is empty, the list is returned.
+ * @param points The list polygon points
+ * @returns A new list containing the 'cleansed' version of the given listing of polygon points
+ * @throws `TypeError` if points is null or if points contains null elements
+ */
 function cleanse(points: Vector2[]): Vector2[] {
   if (points == null) {
     throw new TypeError("Geometry.cleanse: points is null.");
@@ -603,11 +920,11 @@ function cleanse(points: Vector2[]): Vector2[] {
     const next = points[m];
 
     if (point == null)
-      throw new Error("Geometry.cleanse: points[" + i + "] is null.");
+      throw new TypeError("Geometry.cleanse: points[" + i + "] is null.");
     if (prev == null)
-      throw new Error("Geometry.cleanse: points[" + n + "] is null.");
+      throw new TypeError("Geometry.cleanse: points[" + n + "] is null.");
     if (next == null)
-      throw new Error("Geometry.cleanse: points[" + m + "] is null.");
+      throw new TypeError("Geometry.cleanse: points[" + m + "] is null.");
     const diff = point.difference(next);
     if (diff.isZero()) {
       continue;
@@ -632,23 +949,58 @@ function cleanse(points: Vector2[]): Vector2[] {
   return result;
 }
 
+/**
+ * Flips the given polygon about its center along the x-axis and
+ * returns the result as a new polygon.
+ * 
+ * This method assumes that the line is through the origin.
+ * @param polygon The polygon to flip
+ * @param point The point to flip about
+ * @returns The {@link Polygon}
+ * @throws `TypeError` if polygon is null
+ * @see {@link flip}
+ */
 function flipAlongTheXAxis(polygon: Polygon, point?: Vector2): Polygon {
   return flip(polygon, Vector2.X_AXIS, point ?? null);
 }
 
+/**
+ * Flips the given polygon about its center along the y-axis and
+ * returns the result as a new polygon.
+ * 
+ * This method assumes that the line is through the origin.
+ * @param polygon The polygon to flip
+ * @param point The point to flip about
+ * @returns The {@link Polygon}
+ * @throws `TypeError` if polygon is null
+ * @see {@link flip}
+ */
 function flipAlongTheYAxis(polygon: Polygon, point?: Vector2): Polygon {
   return flip(polygon, Vector2.Y_AXIS, point ?? null);
 }
 
+/**
+ * Flips the given polygon about the given line and returns the result
+ * as a new polygon.
+ * 
+ * This method assumes that the line is through the origin.
+ * @param polygon The polygon to flip
+ * @param axis The axis to flip about
+ * @param point The point to flip about
+ * @returns The {@link Polygon}
+ * @throws `TypeError` if polygon is null
+ * @throws `TypeError` if axis is null
+ * @throws `TypeError` if axis is zero
+ */
 function flip(polygon: Polygon, axis: Vector2, point?: Vector2): Polygon {
   if (polygon == null) {
-    throw new Error("Geometry.flip: polygon is null.");
+    throw new TypeError("Geometry.flip: polygon is null.");
   }
   if (axis == null) {
-    throw new Error("Geometry.flip: axis is null.");
+    throw new TypeError("Geometry.flip: axis is null.");
   }
   if (axis.isZero()) {
-    throw new Error("Geometry.flip: axis is zero.");
+    throw new TypeError("Geometry.flip: axis is zero.");
   }
   if (point == null) point = polygon.getCenter();
   axis.normalize();
@@ -668,12 +1020,35 @@ function flip(polygon: Polygon, axis: Vector2, point?: Vector2): Polygon {
   return new Polygon(...nv);
 }
 
+/**
+ * Returns the Minkowski Sum of the given convex shapes.
+ * 
+ * This method computes the Minkowski Sum in O(n + m) time where n and m are the number
+ * of vertices of the first and second convex respectively.
+ * 
+ * This method accepts any {@link Convex} {@link Wound} shape which basically means
+ * {@link Polygon}s or {@link Segment}s.
+ * 
+ * This method will compute the minkowski sum based on the current position of the input
+ * convex. This means that the result polygon may not be positioned at a location that's expected.
+ * There are two ways to solve this. The preferred approach is that both input {@link Convex}
+ * are centered at the origin. This ensures the result will be positioned at the origin AND
+ * helps with the numeric accuracy of the computation. The alternative is to leave the input
+ * {@link Convex} as is and translate the resulting {@link Polygon} by the negative of it's
+ * current position.
+ * @param convex1 The first convex shape
+ * @param convex2 The second convex shape
+ * @returns The {@link Polygon}
+ * @throws `TypeError` if convex1 is null
+ * @throws `TypeError` if convex2 is null
+ * @throws `Error` if the shapes are colinear
+ */
 function basicMinkowskiSum<E extends Wound & Convex>(convex1: E, convex2: E): Polygon {
   if (convex1 == null) {
-    throw new Error("Geometry.basicMinkowskiSum: convex1 is null.");
+    throw new TypeError("Geometry.basicMinkowskiSum: convex1 is null.");
   }
   if (convex2 == null) {
-    throw new Error("Geometry.basicMinkowskiSum: convex2 is null.");
+    throw new TypeError("Geometry.basicMinkowskiSum: convex2 is null.");
   }
   const p1v = convex1.getVertices();
   const p2v = convex2.getVertices();
@@ -750,8 +1125,60 @@ function basicMinkowskiSum<E extends Wound & Convex>(convex1: E, convex2: E): Po
   return new Polygon(...sum);
 }
 
+/**
+ * Performs the Minkowski Sum of the given {@link Polygon} and {@link Circle}.
+ * 
+ * Use the count parameter to specify the number of vertices to use per round corner.
+ * 
+ * If the given polygon has <i>n</i> number of vertices, the returned polygon will have 
+ * <i>n * 2 + n * count</i> number of vertices.
+ * 
+ * This method is O(n) where n is the number of vertices in the given polygon.
+ * @param polygon The polygon
+ * @param circle The circle to add to the polygon
+ * @param count The number of vertices to add for each rounded corner
+ * @returns The {@link Polygon}
+ * @throws `TypeError` if polygon is null
+ * @throws `TypeError` if circle is null
+ * @throws `RangeError` if count <= 0
+ */
 function minkowskiSum(circle: Circle, polygon: Polygon, count: number): Polygon;
+/**
+ * Performs the Minkowski Sum of the given {@link Polygon} and {@link Circle}.
+ * 
+ * Use the count parameter to specify the number of vertices to use per round corner.
+ * 
+ * If the given polygon has <i>n</i> number of vertices, the returned polygon will have 
+ * <i>n * 2 + n * count</i> number of vertices.
+ * 
+ * This method is O(n) where n is the number of vertices in the given polygon.
+ * @param polygon The polygon
+ * @param circle The circle to add to the polygon
+ * @param count The number of vertices to add for each rounded corner
+ * @returns The {@link Polygon}
+ * @throws `TypeError` if polygon is null
+ * @throws `TypeError` if circle is null
+ * @throws `RangeError` if count <= 0
+ */
 function minkowskiSum(polygon: Polygon, circle: Circle, count: number): Polygon;
+/**
+ * Returns a new polygon that has been radially expanded.  This is equivalent to the Minkowski sum of
+ * a circle, of the given radius, and the given polygon.
+ * 
+ * Use the count parameter to specify the number of vertices to use per round corner.
+ * 
+ * If the given polygon has <i>n</i> number of vertices, the returned polygon will have 
+ * <i>n * 2 + n * count</i> number of vertices.
+ * 
+ * This method is O(n) where n is the number of vertices in the given polygon.
+ * @param polygon The polygon to expand radially
+ * @param radius The radial expansion
+ * @param count The number of vertices to add for each rounded corner
+ * @returns The {@link Polygon}
+ * @throws `TypeError` if polygon is null
+ * @throws `RangeError` if radius <= 0
+ * @throws `RangeError` if count <= 0
+ */
 function minkowskiSum(polygon: Polygon, radius: number, count: number): Polygon;
 function minkowskiSum(shape1: Circle | Polygon, shape2: Circle | Polygon | number, count: number): Polygon {
   if (shape1 instanceof Circle) {
@@ -759,20 +1186,20 @@ function minkowskiSum(shape1: Circle | Polygon, shape2: Circle | Polygon | numbe
   }
   if (shape2 instanceof Circle) {
     if (shape2 == null) {
-      throw new Error("Geometry.minkowskiSum: circle is null.");
+      throw new TypeError("Geometry.minkowskiSum: circle is null.");
     }
     return minkowskiSum(shape1, shape2.radius, count);
   }
   const polygon = shape1 as Polygon;
   const radius = shape2 as number;
   if (polygon == null) {
-    throw new Error("Geometry.minkowskiSum: polygon is null.");
+    throw new TypeError("Geometry.minkowskiSum: polygon is null.");
   }
   if (radius <= 0) {
-    throw new Error("Geometry.minkowskiSum: radius must be positive.");
+    throw new RangeError("Geometry.minkowskiSum: radius must be positive.");
   }
   if (count <= 0) {
-    throw new Error("Geometry.minkowskiSum: count must be positive.");
+    throw new RangeError("Geometry.minkowskiSum: count must be positive.");
   }
   const vertices = polygon.vertices;
   const normals = polygon.normals;
@@ -824,12 +1251,23 @@ function minkowskiSum(shape1: Circle | Polygon, shape2: Circle | Polygon | numbe
   return new Polygon(...nVerts);
 }
 
+/**
+ * Returns a scaled version of the given Shape.
+ * 
+ * Shape can be {@link Circle}, {@link Capsule}, {@link Ellipse}, {@link HalfEllipse}, {@link Slice},
+ * {@link Polygon}, or {@link Segment}.
+ * @param shape The shape
+ * @param scale The scale
+ * @returns The shape
+ * @throws `TypeError` if the shape is null
+ * @throws `RangeError` if the scale is not positive
+ */
 function scale<E extends AbstractShape>(shape: E, scale: number): E {
   if (shape == null) {
-    throw new Error("Geometry.scale: shape is null.");
+    throw new TypeError("Geometry.scale: shape is null.");
   }
   if (scale <= 0) {
-    throw new Error("Geometry.scale: scale must be positive.");
+    throw new RangeError("Geometry.scale: scale must be positive.");
   }
   if (shape instanceof Circle) {
     return new Circle(shape.radius * scale) as unknown as E;
@@ -866,13 +1304,24 @@ function scale<E extends AbstractShape>(shape: E, scale: number): E {
   }
 }
 
+/**
+ * Creates a list of {@link Link}s for the given vertices.
+ * 
+ * If the closed parameter is true, an extra link is created joining the last and first
+ * vertices in the list.
+ * @param vertices The poly-line vertices
+ * @param closed true if the shape should be enclosed
+ * @returns A list of {@link Link}s for the given vertices
+ * @throws `TypeError` if vertices is null or an element of the vertex list is null
+ * @throws `RangeError` if vertices.length < 2
+ */
 function createLinks(vertices: Vector2[], closed: boolean): Link[] {
   if (vertices == null)
-    throw new Error('Geometry.createLinks: vertices is null.')
+    throw new TypeError('Geometry.createLinks: vertices is null.')
   const len = vertices.length;
 
   if (len < 2)
-    throw new Error('Geometry.createLinks: vertices.length must be greater than or equal to 2.');
+    throw new RangeError('Geometry.createLinks: vertices.length must be greater than or equal to 2.');
 
   const links = new Array<Link>();
   for (let i = 0; i < len - 1; i++) {
@@ -880,10 +1329,10 @@ function createLinks(vertices: Vector2[], closed: boolean): Link[] {
     const p2 = vertices[i + 1];
 
     if (p1 == null)
-      throw new Error('Geometry.createLinks: vertices[' + i + '] is null.');
+      throw new TypeError('Geometry.createLinks: vertices[' + i + '] is null.');
 
     if (p2 == null)
-      throw new Error('Geometry.createLinks: vertices[' + (i + 1) + '] is null.');
+      throw new TypeError('Geometry.createLinks: vertices[' + (i + 1) + '] is null.');
 
     const link = new Link(p1.copy(), p2.copy());
     if (i > 0) {
@@ -907,6 +1356,22 @@ function createLinks(vertices: Vector2[], closed: boolean): Link[] {
   return links;
 }
 
+/**
+ * Returns the intersection {@link Polygon} for the given {@link Polygon}s or returns null if there's no intersection.
+ * 
+ * The basic premise of the algorithm is to track which polygon's edge is on the outside and when they intersect. This
+ * allows the algorithm to be O(n+m) complexity (linear time) by iterating the edges of each polygon until all intersections
+ * have been found. See the linked paper for more details.
+ * 
+ * NOTE: This algorithm returns null for all scenarios where the two {@link Polygon}s have touching edges or touching vertices.
+ * The primary reason for this is to improve the robustness of the algorithm, but also to ensure the output is always
+ * non-degenerate.
+ * @param p1 The first {@link Polygon}
+ * @param tx1 The first {@link Polygon}'s {@link Transform}
+ * @param p2 The second {@link Polygon}
+ * @param tx2 The second {@link Polygon}'s {@link Transform}
+ * @returns The intersection {@link Polygon} or null if there's no intersection
+ */
 function getIntersection(p1: Polygon, tx1: Transform, p2: Polygon, tx2: Transform): Polygon {
   let firstIntersectionI = -1;
   let firstIntersectionP = -1;

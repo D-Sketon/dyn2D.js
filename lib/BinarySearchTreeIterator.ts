@@ -1,16 +1,57 @@
 import { BinarySearchTreeNode } from "./BinarySearchTreeNode";
 import { Comparable, compareTo } from "./Comparable";
 
+/**
+ * An iterator class for looping through the elements of a {@link BinarySearchTree} 
+ * in order or in reverse order.
+ */
 export class BinarySearchTreeIterator<E extends Comparable<E>> implements Iterator<E>{
+  /**
+   * The stack of nodes.
+   */
   stack: BinarySearchTreeNode<E>[];
+  /**
+   * The root node.
+   */
   root: BinarySearchTreeNode<E> | null;
+  /**
+   * The lower bound of the range to iterate over.
+   */
   from: E | null;
+  /**
+   * The upper bound of the range to iterate over.
+   */
   to: E | null;
+  /**
+   * True if the iterator is iterating in order, false if iterating in reverse order.
+   */
   inOrder: boolean;
 
+  /**
+   * Minimal constructor.
+   * @param root The root node.
+   */
   constructor(root: BinarySearchTreeNode<E> | null);
+  /**
+   * Minimal constructor.
+   * @param root The root node.
+   * @param inOrder True if the iterator is iterating in order, false if iterating in reverse order.
+   */
   constructor(root: BinarySearchTreeNode<E> | null, inOrder: boolean);
+  /**
+   * Minimal constructor.
+   * @param root The root node.
+   * @param from The lower bound of the range to iterate over.
+   * @param to The upper bound of the range to iterate over.
+   */
   constructor(root: BinarySearchTreeNode<E> | null, from: E | null, to: E | null);
+  /**
+   * Full constructor.
+   * @param root The root node.
+   * @param from The lower bound of the range to iterate over.
+   * @param to The upper bound of the range to iterate over.
+   * @param inOrder True if the iterator is iterating in order, false if iterating in reverse order.
+   */
   constructor(root: BinarySearchTreeNode<E> | null, from: E | null, to: E | null, inOrder: boolean);
   constructor(root: BinarySearchTreeNode<E> | null, ...args: any[]) {
     this.stack = [];
@@ -42,6 +83,10 @@ export class BinarySearchTreeIterator<E extends Comparable<E>> implements Iterat
     }
   }
 
+  /**
+   * Pushes the left nodes onto the stack starting from the specified node.
+   * @param from The lower bound of the range to iterate over.
+   */
   protected pushLeftFrom(from: E): void {
     let node = this.root as BinarySearchTreeNode<E> | null;
     while (node != null) {
@@ -58,6 +103,10 @@ export class BinarySearchTreeIterator<E extends Comparable<E>> implements Iterat
     }
   }
 
+  /**
+   * Pushes the left nodes onto the stack starting from the specified node.
+   * @param node The node to start from.
+   */
   protected pushLeft(node: BinarySearchTreeNode<E> | null): void {
     while (node != null) {
       if (this.to == null || compareTo(this.to, node.comparable) >= 0) {
@@ -67,6 +116,10 @@ export class BinarySearchTreeIterator<E extends Comparable<E>> implements Iterat
     }
   }
 
+  /**
+   * Pushes the right nodes onto the stack starting from the specified node.
+   * @param node The node to start from.
+   */
   protected pushRight(node: BinarySearchTreeNode<E> | null): void {
     while (node != null) {
       this.stack.push(node);
