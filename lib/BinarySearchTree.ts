@@ -33,7 +33,7 @@ export class BinarySearchTree<E extends Comparable<E>> {
    */
   constructor();
   /**
-   * Full constructor.
+   * Minimal constructor.
    * @param selfBalancing true if the tree is self balancing, false otherwise.
    */
   constructor(selfBalancing: boolean);

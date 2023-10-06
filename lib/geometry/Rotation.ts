@@ -23,21 +23,21 @@ export class Rotation implements Copyable<Rotation>{
   sint: number;
 
   /**
-   * Default constructor. Creates a rotation of 0 radians.
+   * Default constructor.
    */
   constructor();
   /**
-   * Minimal constructor. Creates a rotation with the given angle.
+   * Minimal constructor.
    * @param angle The angle of rotation in radians.
    */
   constructor(angle: number);
   /**
-   * Copy constructor. Creates a copy of the given {@link Rotation}.
+   * Copy constructor.
    * @param rotation The {@link Rotation} to copy.
    */
   constructor(rotation: Rotation);
   /**
-   * Full constructor. Creates a rotation with the given cosine and sine values.
+   * Full constructor.
    * @param cost The cosine of the angle of rotation.
    * @param sint The sine of the angle of rotation.
    */

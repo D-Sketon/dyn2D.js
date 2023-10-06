@@ -10,3 +10,4 @@ export { Ownable } from './Ownable';
 export * as UnitConversion from './UnitConversion';
 
 export * as GeometryModule from './geometry';
+export * as CollisionModule from './collision';
