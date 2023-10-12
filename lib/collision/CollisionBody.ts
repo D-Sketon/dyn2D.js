@@ -1,14 +1,8 @@
 import { Fixture } from "./Fixture";
 import { DataContainer } from "../DataContainer";
 import { Ownable } from "../Ownable";
-import { Shiftable } from "../geometry/Shiftable";
-import { Transformable } from "../geometry/Transformable";
-import { Convex } from "../geometry/Convex";
-import { Vector2 } from "../geometry/Vector2";
-import { Transform } from "../geometry/Transform";
-import { AABB } from "../geometry/AABB";
 import { FixtureModificationHandler } from "./FixtureModificationHandler";
-import { Shape } from '../geometry/Shape';
+import { AABB, Convex, Shiftable, Transform, Transformable, Vector2, Shape } from "../geometry";
 
 /**
  * Represents an object that can collide with other objects.

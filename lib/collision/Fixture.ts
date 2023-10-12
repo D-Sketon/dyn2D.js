@@ -1,7 +1,6 @@
 import { DataContainer } from "../DataContainer";
-import { Convex } from "../geometry/Convex";
+import { Convex, Shape } from "../geometry";
 import { DEFAULT_FILTER, Filter } from "./Filter";
-import { Shape } from '../geometry/Shape';
 
 /**
  * Represents a geometric piece of a {@link CollisionBody}.
@@ -40,6 +39,14 @@ export class Fixture implements DataContainer {
 
   public toString(): string {
     return `Fixture[shape=${this.shape}, filter=${this.filter}, sensor=${this.sensor}]`;
+  }
+
+  /**
+   * Returns the {@link Convex} {@link Shape} of this {@link Fixture}.
+   * @returns The {@link Convex} {@link Shape} 
+   */
+  public getShape(): Convex {
+    return this.shape; 
   }
 
   /**
